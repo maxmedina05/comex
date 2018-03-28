@@ -10,9 +10,10 @@
 	"scripts": {
 		"start": "node index.js",
 		"server": "nodemon index.js",
-		"client": "npm run start --prefix client",
+		"client": "npm run start --prefix react-app",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
-		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+		"heroku-postbuild":
+			"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
 	},
 	"author": "Max Medina",
 	"license": "ISC",
