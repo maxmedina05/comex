@@ -48,14 +48,14 @@ const Checkout = ({ meals, removeMeal }) => {
 						<td colSpan="3" />
 					</tr>
 
-					<tr>
+					{/* <tr>
 						<td>Sub Total</td>
 						<td>0</td>
 					</tr>
 					<tr>
 						<td>Impuestos</td>
 						<td>0</td>
-					</tr>
+					</tr> */}
 
 					<tr>
 						<td>Total</td>
