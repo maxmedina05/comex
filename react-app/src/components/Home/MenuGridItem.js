@@ -8,11 +8,7 @@ const MenuGridItem = ({ menu, onAddMealClick }) => {
 				<img className="card-img-top" src={menu.imageUrl} alt="" />
 				<div className="card-body">
 					<span className="badge badge-warning float-right">
-						<FormattedNumber
-							value={menu.price}
-							style="decimal"
-							minimumFractionDigits={2}
-						/>
+						<FormattedNumber value={menu.price} minimumFractionDigits={2} />
 					</span>
 					<span className="card-title">
 						<h6>{menu.name} </h6>

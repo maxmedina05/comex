@@ -8,10 +8,17 @@ export default class Home extends Component {
 
 		this.addMeal = this.addMeal.bind(this);
 		this.removeMeal = this.removeMeal.bind(this);
+		this.loadMenuData = this.loadMenuData.bind(this);
 		this.state = {
 			meals: []
 		};
 	}
+
+	componentDidMount() {
+		this.loadMenuData();
+	}
+
+	loadMenuData() {}
 
 	addMeal(meal) {
 		this.setState({
