@@ -1,0 +1,127 @@
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+const makeResponseBody = require('../response-body');
+const DailyMenu = mongoose.model('menus');
+
+async function getAll(req, res) {
+	try {
+		const resources = await DailyMenu.find().populate('items.product');
+
+		res.json(
+			makeResponseBody(
+				'success',
+				resources,
+				'Daily Menus retreived successfully!',
+				resources.length
+			)
+		);
+	} catch (err) {
+		res.json(makeResponseBody('error', null, err.message | err, 0));
+	}
+}
+
+async function getOne(req, res) {
+	const objectId = req.params.objectId;
+
+	try {
+		const resource = await DailyMenu.findOne(ObjectId(objectId));
+		if (!resource) {
+			throw Error('Daily Menu not found!');
+		}
+		res.json(
+			makeResponseBody(
+				'success',
+				resource,
+				'Daily Menu retreived successfully!',
+				1
+			)
+		);
+	} catch (err) {
+		res.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+}
+
+async function addOne(req, res) {
+	const { items, startDate, endDate, discount } = req.body;
+
+	const resource = new DailyMenu({
+		items,
+		startDate,
+		endDate,
+		discount
+	});
+
+	try {
+		await resource.save();
+		res.json(
+			makeResponseBody(
+				'success',
+				resource,
+				'Daily Menu created successfully!',
+				1
+			)
+		);
+	} catch (err) {
+		res
+			.status(422)
+			.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+}
+
+async function updateOne(req, res) {
+	const objectId = req.params.objectId;
+	const { items, startDate, endDate, discount } = req.body;
+
+	try {
+		const resource = await DailyMenu.findOne(ObjectId(objectId));
+		resource.items = items;
+		resource.startDate = startDate;
+		resource.endDate = endDate;
+		resource.discount = discount;
+
+		await resource.save();
+		res.json(
+			makeResponseBody(
+				'success',
+				resource,
+				'Daily Menu updated successfully!',
+				1
+			)
+		);
+	} catch (err) {
+		res
+			.status(400)
+			.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+}
+
+async function removeOne(req, res) {
+	const objectId = req.params.objectId;
+
+	try {
+		const resource = await DailyMenu.findOne(ObjectId(objectId));
+		await resource.remove();
+		res.json(
+			makeResponseBody(
+				'success',
+				resource,
+				'Daily Menu removed successfully!',
+				1
+			)
+		);
+	} catch (err) {
+		res
+			.status(400)
+			.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+}
+
+router.get('/', getAll);
+router.post('/', addOne);
+router.get('/:objectId', getOne);
+router.put('/:objectId', updateOne);
+router.delete('/:objectId', removeOne);
+
+module.exports = router;
