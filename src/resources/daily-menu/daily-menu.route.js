@@ -43,14 +43,50 @@ async function getOne(req, res) {
 	}
 }
 
+async function getMenuAvailable(req, res) {
+	const now = new Date();
+
+	try {
+		const resources = await DailyMenu.find({
+			endDate: { $gte: now }
+		});
+		if (!resources) {
+			throw Error('Daily Menu not found!');
+		}
+
+		const resourcesWithLocalTime = resources.map(res => {
+			return {
+				...res._doc,
+				serverStartDate: new Date(res.startDate.getTime() - res.offset * 60000),
+				serverEndDate: new Date(res.endDate.getTime() - res.offset * 60000)
+			};
+		});
+
+		res.json(
+			makeResponseBody(
+				'success',
+				resourcesWithLocalTime,
+				'Daily Menu retreived successfully!',
+				resources.length
+			)
+		);
+	} catch (err) {
+		res.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+}
+
 async function addOne(req, res) {
 	const { items, startDate, endDate, discount } = req.body;
+
+	const date = new Date(startDate);
+	const offset = date.getTimezoneOffset();
 
 	const resource = new DailyMenu({
 		items,
 		startDate,
 		endDate,
-		discount
+		discount,
+		offset
 	});
 
 	try {
@@ -80,6 +116,12 @@ async function updateOne(req, res) {
 		resource.startDate = startDate;
 		resource.endDate = endDate;
 		resource.discount = discount;
+
+		if (!resource.offset) {
+			const date = new Date(startDate);
+			const offset = date.getTimezoneOffset();
+			resource.offset = offset;
+		}
 
 		await resource.save();
 		res.json(
@@ -120,6 +162,7 @@ async function removeOne(req, res) {
 
 router.get('/', getAll);
 router.post('/', addOne);
+router.get('/available', getMenuAvailable);
 router.get('/:objectId', getOne);
 router.put('/:objectId', updateOne);
 router.delete('/:objectId', removeOne);
