@@ -7,6 +7,7 @@ const path = require('path');
 
 const loadProductResource = require('./src/resources/product/index');
 const loadDailyMenuResource = require('./src/resources/daily-menu/index');
+const loadOrderResource = require('./src/resources/order/index');
 
 const app = express();
 
@@ -15,6 +16,7 @@ mongoose.connect(process.env.MONGO_URI);
 
 loadProductResource(app, '/api/v1');
 loadDailyMenuResource(app, '/api/v1');
+loadOrderResource(app, '/api/v1');
 
 app.use('/', (req, res) => {
 	res.send('Comex is Alive');
