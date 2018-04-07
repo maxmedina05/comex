@@ -26,7 +26,9 @@ async function getOne(req, res) {
 	const objectId = req.params.objectId;
 
 	try {
-		const resource = await DailyMenu.findOne(ObjectId(objectId));
+		const resource = await DailyMenu.findOne(ObjectId(objectId)).populate(
+			'items.product'
+		);
 		if (!resource) {
 			throw Error('Daily Menu not found!');
 		}
@@ -108,7 +110,7 @@ async function addOne(req, res) {
 
 async function updateOne(req, res) {
 	const objectId = req.params.objectId;
-	const { items, startDate, endDate, discount } = req.body;
+	const { items, startDate, endDate, discount, name } = req.body;
 
 	try {
 		const resource = await DailyMenu.findOne(ObjectId(objectId));
@@ -116,6 +118,7 @@ async function updateOne(req, res) {
 		resource.startDate = startDate;
 		resource.endDate = endDate;
 		resource.discount = discount;
+		resource.name = name;
 
 		if (!resource.offset) {
 			const date = new Date(startDate);

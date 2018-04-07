@@ -11,7 +11,7 @@ const DailyMenuSchema = new Schema({
 	startDate: { type: Date, default: Date.now },
 	endDate: { type: Date, default: Date.now },
 	offset: Number,
-	discount: { type: Number, default: 0 }
+	name: String
 });
 
 mongoose.model('menus', DailyMenuSchema);

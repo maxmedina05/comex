@@ -8,6 +8,7 @@ import OrdersPage from './components/Orders/OrdersPage';
 import ProductListPage from './components/Admin/Products/ProductListPage';
 import ProductEditPage from './components/Admin/Products/ProductEditPage';
 import MenuEditPage from './components/Admin/DailyMenu/MenuEditPage';
+import MenuListPage from './components/Admin/DailyMenu/MenuListPage';
 import RegisterPage from './components/Auth/RegisterPage';
 import LoginPage from './components/Auth/LoginPage';
 
@@ -54,6 +55,7 @@ class App extends Component {
 						<Route path="/login" component={LoginPage} />
 						<Route path="/orders" component={OrdersPage} />
 						<Route exact path="/admin/products" component={ProductListPage} />
+						<Route exact path="/admin/menus" component={MenuListPage} />
 						<Route
 							path="/admin/products/:objectId"
 							component={ProductEditPage}
