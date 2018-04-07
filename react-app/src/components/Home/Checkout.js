@@ -32,16 +32,16 @@ const MealTableRow = props => {
 	);
 };
 
-const Checkout = ({ meals, removeMeal }) => {
+const Checkout = ({ meals, removeMeal, inputChange, submitOrder }) => {
 	return (
-		<form>
+		<form onSubmit={submitOrder}>
 			<h2>Caja</h2>
 			<h5>Quiero Ordernar:</h5>
 
 			<table className="table">
 				<tbody>
 					{meals.map(meal => (
-						<MealTableRow key={meal.id} {...meal} removeMeal={removeMeal} />
+						<MealTableRow key={meal._id} {...meal} removeMeal={removeMeal} />
 					))}
 
 					<tr>
@@ -65,7 +65,13 @@ const Checkout = ({ meals, removeMeal }) => {
 			</table>
 			<div className="form-group">
 				<label htmlFor="message">Mensaje para el provedor</label>
-				<textarea className="form-control" id="message" row="3" />
+				<textarea
+					className="form-control"
+					name="message"
+					id="message"
+					row="3"
+					onChange={inputChange}
+				/>
 			</div>
 
 			<button type="reset" className="btn btn-danger">

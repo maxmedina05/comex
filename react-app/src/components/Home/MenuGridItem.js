@@ -1,21 +1,31 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-const MenuGridItem = ({ menu, onAddMealClick }) => {
+const MenuGridItem = ({ item, onAddMealClick }) => {
+	const product = item.product;
+
 	return (
 		<div className="col-lg-2 col-md-3 mb-4">
 			<div className="card h-100">
-				<img className="card-img-top" src={menu.imageUrl} alt="" />
+				<img
+					className="card-img-top"
+					src={
+						product.imageUrl
+							? product.imageUrl
+							: 'http://lorempizza.com/380/240'
+					}
+					alt=""
+				/>
 				<div className="card-body">
 					<span className="badge badge-warning float-right">
-						<FormattedNumber value={menu.price} minimumFractionDigits={2} />
+						<FormattedNumber value={product.price} minimumFractionDigits={2} />
 					</span>
 					<span className="card-title">
-						<h6>{menu.name} </h6>
+						<h6>{product.name} </h6>
 					</span>
 				</div>
 				<div className="card-footer">
-					<button type="button" onClick={() => onAddMealClick(menu)}>
+					<button type="button" onClick={() => onAddMealClick(product)}>
 						Agregar
 					</button>
 				</div>

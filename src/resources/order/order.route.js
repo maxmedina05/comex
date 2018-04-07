@@ -39,7 +39,7 @@ async function getOne(req, res) {
 }
 
 async function addOne(req, res) {
-	const { items, createdAt, customer } = req.body;
+	const { items, createdAt, customer, message } = req.body;
 
 	const date = new Date(createdAt);
 	const offset = date.getTimezoneOffset();
@@ -49,6 +49,7 @@ async function addOne(req, res) {
 		createdAt,
 		offset,
 		customer,
+		message,
 		status: 'Active',
 		modifiedAt: createdAt
 	});

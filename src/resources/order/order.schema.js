@@ -13,7 +13,8 @@ const OrderSchema = new Schema({
 	offset: Number,
 	status: String,
 	customer: String,
-	deliveryBoy: String
+	deliveryBoy: String,
+	message: String
 });
 
 // status
