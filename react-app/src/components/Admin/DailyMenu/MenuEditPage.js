@@ -7,17 +7,18 @@ export default class DailyMenuEditPage extends Component {
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.loadProduct = this.loadProduct.bind(this);
-		this.createNewProduct = this.createNewProduct.bind(this);
-		this.updateProduct = this.updateProduct.bind(this);
+		this.loadResource = this.loadResource.bind(this);
+		this.createNewResource = this.createNewResource.bind(this);
+		this.updateResource = this.updateResource.bind(this);
 
 		this.state = {
 			objectId: '0',
 			isEditMode: false,
-			name: '',
-			category: '',
-			price: 0.0,
-			imageUrl: ''
+			items: [],
+			startTime: new Date(),
+			endTime: new Date(),
+			discount: 0.0,
+			description: ''
 		};
 	}
 
@@ -25,21 +26,22 @@ export default class DailyMenuEditPage extends Component {
 		const { match: { params } } = this.props;
 		if (params.objectId !== 'new') {
 			this.setState({ isEditMode: true });
-			this.loadProduct(params.objectId);
+			this.loadResource(params.objectId);
 		}
 	}
 
-	async loadProduct(objectId) {
+	async loadResource(objectId) {
 		try {
-			const response = await axios.get(`/api/v1/products/${objectId}`);
+			const response = await axios.get(`/api/v1/menus/${objectId}`);
 			const body = response.data;
 			if (body.status === 'success') {
 				this.setState({
 					objectId: body.data._id,
-					name: body.data.name,
-					price: body.data.price,
-					category: body.data.category ? body.data.category : '',
-					imageUrl: body.data.imageUrl
+					items: body.data.name,
+					startTime: body.data.startTime,
+					endTime: body.data.endTime,
+					description: body.data.description,
+					discount: body.data.discount
 				});
 			} else {
 				throw Error(body.message);
@@ -53,19 +55,20 @@ export default class DailyMenuEditPage extends Component {
 		event.preventDefault();
 
 		if (this.state.isEditMode) {
-			this.updateProduct();
+			this.updateResource();
 		} else {
-			this.createNewProduct();
+			this.createNewResource();
 		}
 	}
 
-	async createNewProduct() {
+	async createNewResource() {
 		try {
-			const response = await axios.post('/api/v1/products', {
-				name: this.state.name,
-				price: this.state.price,
-				category: this.state.category,
-				imageUrl: this.state.imageUrl
+			const response = await axios.post('/api/v1/menus', {
+				description: this.state.description,
+				discount: this.state.discount,
+				startTime: this.state.startTime,
+				endTime: this.state.endTime,
+				items: this.state.items
 			});
 
 			if (response.data.status === 'error') {
@@ -77,17 +80,15 @@ export default class DailyMenuEditPage extends Component {
 		}
 	}
 
-	async updateProduct() {
+	async updateResource() {
 		try {
-			const response = await axios.put(
-				`/api/v1/products/${this.state.objectId}`,
-				{
-					name: this.state.name,
-					price: this.state.price,
-					category: this.state.category,
-					imageUrl: this.state.imageUrl
-				}
-			);
+			const response = await axios.put(`/api/v1/menus/${this.state.objectId}`, {
+				description: this.state.description,
+				discount: this.state.discount,
+				startTime: this.state.startTime,
+				endTime: this.state.endTime,
+				items: this.state.items
+			});
 
 			if (response.data.status === 'error') {
 				throw Error(response.data.message);
@@ -100,7 +101,6 @@ export default class DailyMenuEditPage extends Component {
 
 	handleInputChange(event) {
 		const target = event.target;
-
 		const value = target.value;
 		const name = target.name;
 
@@ -112,9 +112,7 @@ export default class DailyMenuEditPage extends Component {
 	render() {
 		return (
 			<div>
-				<h1>
-					{this.state.isEditMode ? 'Editar Producto' : 'Agregar Producto'}
-				</h1>
+				<h1>{this.state.isEditMode ? 'Editar Menu' : 'Agregar Menu'}</h1>
 				<form onSubmit={this.handleSubmit}>
 					<div className="form-group">
 						<label htmlFor="name">Name</label>
