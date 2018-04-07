@@ -6,6 +6,8 @@ const makeResponseBody = require('../response-body');
 const Product = mongoose.model('products');
 
 async function getAll(req, res) {
+	console.log(req.user);
+
 	try {
 		const products = await Product.find();
 		res.json(

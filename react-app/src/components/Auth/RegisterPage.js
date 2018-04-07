@@ -138,7 +138,7 @@ export default class RegisterPage extends Component {
 						/>
 					</div>
 					<div className="form-group">
-						<label htmlFor="category">Contraseña</label>
+						<label htmlFor="password">Contraseña</label>
 						<input
 							className="form-control"
 							id="password"
@@ -148,8 +148,19 @@ export default class RegisterPage extends Component {
 							onChange={this.handleInputChange}
 						/>
 					</div>
-
 					<div className="form-group">
+						<label htmlFor="repeatPassword">Repita la Contraseña</label>
+						<input
+							className="form-control"
+							id="repeatPassword"
+							name="repeatPassword"
+							type="repeatPassword"
+							value={this.state.repeatPassword}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+
+					{/* <div className="form-group">
 						<label htmlFor="name">Nombre y Apellido</label>
 						<input
 							className="form-control"
@@ -231,8 +242,9 @@ export default class RegisterPage extends Component {
 							value={this.state.reference}
 							onChange={this.handleInputChange}
 						/>
-					</div>
+					</div> */}
 
+					<button className="btn btn-primary">Guardar</button>
 					<button className="btn btn-primary">Guardar</button>
 				</form>
 			</div>
