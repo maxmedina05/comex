@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class RegisterPage extends Component {
@@ -12,7 +13,8 @@ export default class RegisterPage extends Component {
 		this.state = {
 			email: '',
 			password: '',
-			repeatPassword: ''
+			repeatPassword: '',
+			redirectToReferrer: false
 		};
 	}
 
@@ -39,7 +41,14 @@ export default class RegisterPage extends Component {
 			});
 			const body = response.data;
 			if (body.status === 'success') {
-				window.location.replace('/');
+				this.props.userHasAuthenticated({
+					authenticated: true,
+					role: body.data.role,
+					objectId: body.data.objectId
+				});
+				this.setState({
+					redirectToReferrer: true
+				});
 			} else {
 				throw Error(body.message);
 			}
@@ -59,10 +68,45 @@ export default class RegisterPage extends Component {
 	}
 
 	render() {
+		const { from } = this.props.location.state || { from: { pathname: '/' } };
+		const { redirectToReferrer } = this.state;
+
+		if (redirectToReferrer) {
+			if (redirectToReferrer) {
+				return <Redirect to={from} />;
+			}
+		}
+
 		return (
-			<div>
+			<div className="container">
 				<h1>{this.state.isEditMode ? 'Editar Perfil' : 'Crear una cuenta'}</h1>
 				<form onSubmit={this.handleSubmit}>
+					<div className="row">
+						<div className="col">
+							<label htmlFor="firstName">Nombre</label>
+							<input
+								required
+								className="form-control"
+								id="firstName"
+								name="firstName"
+								placeholder="Jose"
+								value={this.state.firstName}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+						<div className="col">
+							<label htmlFor="lastName">Apellido</label>
+							<input
+								required
+								className="form-control"
+								id="lastName"
+								name="lastName"
+								placeholder="Jose Perez"
+								value={this.state.lastName}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+					</div>
 					<div className="form-group">
 						<label htmlFor="email">Email</label>
 						<input
@@ -93,7 +137,7 @@ export default class RegisterPage extends Component {
 							className="form-control"
 							id="repeatPassword"
 							name="repeatPassword"
-							type="repeatPassword"
+							type="password"
 							value={this.state.repeatPassword}
 							onChange={this.handleInputChange}
 						/>

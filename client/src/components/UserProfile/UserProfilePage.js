@@ -49,7 +49,16 @@ export default class UserProfilePage extends Component {
 					objectId: body.data._id,
 					email: body.data.email,
 					firstName: body.data.userInfo ? body.data.userInfo.firstName : '',
-					lastName: body.data.userInfo ? body.data.userInfo.lastName : ''
+					lastName: body.data.userInfo ? body.data.userInfo.lastName : '',
+					companyName: body.data.userInfo ? body.data.userInfo.companyName : '',
+					department: body.data.userInfo ? body.data.userInfo.department : '',
+					address: body.data.userInfo ? body.data.userInfo.address.address : '',
+					state: body.data.userInfo ? body.data.userInfo.address.state : '',
+					reference: body.data.userInfo
+						? body.data.userInfo.address.reference
+						: '',
+					city: body.data.userInfo ? body.data.userInfo.address.city : '',
+					phone: body.data.userInfo ? body.data.userInfo.phone : ''
 				});
 			} else {
 				throw Error(body.message);
@@ -92,7 +101,7 @@ export default class UserProfilePage extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="container">
 				<h1>Perfil de Usuario</h1>
 				<form onSubmit={this.handleSubmit}>
 					<div className="form-group">

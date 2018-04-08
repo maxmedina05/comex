@@ -7,7 +7,7 @@ const makeResponseBody = require('../response-body');
 const User = require('./user.schema');
 
 async function signup(req, res) {
-	const { email, password } = req.body;
+	const { email, password, firstName, lastName } = req.body;
 
 	try {
 		const existingUser = await User.findOne({ email });
@@ -17,15 +17,22 @@ async function signup(req, res) {
 
 		const user = new User({
 			email,
+			firstName: firstName,
+			lastName: lastName,
 			role: 'Customer'
 		});
 		const hashPassword = await user.generateHash(password);
 		user.password = hashPassword;
-
 		await user.save();
-		res.json(
-			makeResponseBody('success', user, 'User created successfully!', 1)
-		);
+
+		req.login(user, err => {
+			if (err) {
+				throw Error(err.message || err);
+			}
+			res.json(
+				makeResponseBody('success', user, 'User created successfully!', 1)
+			);
+		});
 	} catch (err) {
 		res
 			.status(422)

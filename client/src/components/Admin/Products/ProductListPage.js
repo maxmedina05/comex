@@ -59,7 +59,7 @@ export default class ProductListPage extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="container">
 				<h1>Product List Page</h1>
 				<Link to="/admin/products/new">Agregar Producto Nuevo</Link>
 				<ResourceTable

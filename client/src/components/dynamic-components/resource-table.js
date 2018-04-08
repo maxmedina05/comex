@@ -17,7 +17,11 @@ const ResourceTable = ({
 							{name}
 						</th>
 					))}
-					<th scope="col">Acciones</th>
+					{deleteActionClick && (
+						<th className="no-print" scope="col">
+							Acciones
+						</th>
+					)}
 				</tr>
 			</thead>
 			<tbody>
@@ -57,14 +61,16 @@ const ResourceTableRow = ({
 				</a>
 			</th>
 			{displayFields.map(field => <td key={field}>{resource[field]}</td>)}
-			<td>
-				<button
-					className="btn btn-warning"
-					onClick={() => deleteActionClick(resource._id)}
-				>
-					Eliminar
-				</button>
-			</td>
+			{deleteActionClick && (
+				<td className="no-print">
+					<button
+						className="btn btn-warning"
+						onClick={() => deleteActionClick(resource._id)}
+					>
+						Eliminar
+					</button>
+				</td>
+			)}
 		</tr>
 	);
 };

@@ -6,9 +6,14 @@ const { ObjectId } = mongoose.Types;
 const makeResponseBody = require('./resources/response-body');
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-	const { email } = req.user;
+	const { email, role, _id } = req.user;
 	res.json(
-		makeResponseBody('success', { email }, 'Logged in successfully!', 1)
+		makeResponseBody(
+			'success',
+			{ objectId: _id, email, role },
+			'Logged in successfully!',
+			1
+		)
 	);
 });
 
@@ -16,9 +21,14 @@ router.get('/user', (req, res) => {
 	if (!req.user) {
 		res.json(makeResponseBody('error', null, 'User is not authenticated!', 0));
 	} else {
-		const { email } = req.user;
+		const { email, role, _id } = req.user;
 		res.json(
-			makeResponseBody('success', { email }, 'User is authenticated!', 1)
+			makeResponseBody(
+				'success',
+				{ objectId: _id, email, role },
+				'User is authenticated!',
+				1
+			)
 		);
 	}
 });

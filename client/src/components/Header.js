@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function renderLoginOptions(isAuthenticated) {
+function renderLoginOptions(isAuthenticated, objectId) {
 	if (isAuthenticated) {
-		return (
-			<li>
+		return [
+			<li key="profile">
+				<Link to={`/users/${objectId}/profile`}>Mi Perfil</Link>
+			</li>,
+			<li key="logout">
 				<a href="/api/v1/auth/logout">Logout</a>
 			</li>
-		);
+		];
 	}
 
 	return [
@@ -20,23 +23,30 @@ function renderLoginOptions(isAuthenticated) {
 	];
 }
 
-const Header = ({ isAuthenticated }) => {
+function renderAdminRoutes(userRole) {
+	if (userRole === 'Administrator') {
+		return [
+			<li key="orders">
+				<Link to="/admin/orders">Ordenes</Link>
+			</li>,
+			<li key="products">
+				<Link to="/admin/products">Products</Link>
+			</li>,
+			<li key="menus">
+				<Link to="/admin/menus">Menus</Link>
+			</li>
+		];
+	}
+}
+
+const Header = ({ isAuthenticated, role, objectId }) => {
 	return (
 		<ul>
 			<li>
 				<Link to="/">Menu de Hoy</Link>
 			</li>
-			<li>
-				<Link to="/admin/orders">Ordenes</Link>
-			</li>
-			<li>
-				<Link to="/admin/products">Products</Link>
-			</li>
-			<li>
-				<Link to="/admin/menus">Menus</Link>
-			</li>
-
-			{renderLoginOptions(isAuthenticated)}
+			{renderAdminRoutes(role)}
+			{renderLoginOptions(isAuthenticated, objectId)}
 		</ul>
 	);
 };

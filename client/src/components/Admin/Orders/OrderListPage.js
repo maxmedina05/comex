@@ -69,7 +69,7 @@ export default class OrderListPage extends Component {
 					dataSource={this.state.orders}
 					displayFields={this.displayFields}
 					listItemClick={this.handleListItemClick}
-					deleteActionClick={this.handleDeleteActionClick}
+					// deleteActionClick={this.handleDeleteActionClick}
 				/>
 			</div>
 		);

@@ -115,8 +115,8 @@ export default class DailyMenuEditPage extends Component {
 				this.setState({
 					objectId: body.data._id,
 					items: body.data.items,
-					startDate: body.data.startDate,
-					endDate: body.data.endDate,
+					startDate: new Date(body.data.startDate),
+					endDate: new Date(body.data.endDate),
 					name: body.data.name,
 					discount: body.data.discount
 				});
@@ -163,8 +163,8 @@ export default class DailyMenuEditPage extends Component {
 			const response = await axios.put(`/api/v1/menus/${this.state.objectId}`, {
 				name: this.state.name,
 				discount: this.state.discount,
-				startTime: this.state.startTime,
-				endTime: this.state.endTime,
+				startDate: this.state.startDate,
+				endDate: this.state.endDate,
 				items: this.state.items
 			});
 
@@ -182,7 +182,6 @@ export default class DailyMenuEditPage extends Component {
 		const target = event.target;
 		const value = target.value;
 		const name = target.name;
-
 		this.setState({
 			[name]: value
 		});
@@ -206,7 +205,7 @@ export default class DailyMenuEditPage extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="container">
 				<h1>{this.state.isEditMode ? 'Editar Menu' : 'Agregar Menu'}</h1>
 				<form onSubmit={this.handleSubmit}>
 					<div className="form-group">
@@ -225,7 +224,6 @@ export default class DailyMenuEditPage extends Component {
 						<Datetime
 							id="startDate"
 							name="startDate"
-							dateFormat={false}
 							value={this.state.startDate}
 							onChange={this.handleStartDateChange}
 						/>
@@ -233,7 +231,6 @@ export default class DailyMenuEditPage extends Component {
 					<div className="form-group">
 						<label htmlFor="startDate">Tiempo de Fin</label>
 						<Datetime
-							dateFormat={false}
 							id="endDate"
 							name="endDate"
 							value={this.state.endDate}
