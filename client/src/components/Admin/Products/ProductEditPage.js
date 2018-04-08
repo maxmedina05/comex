@@ -72,6 +72,7 @@ export default class ProductEditPage extends Component {
 				throw Error(response.data.message);
 			}
 			console.log(response.data.message);
+			this.props.history.goBack();
 		} catch (err) {
 			console.log(err);
 		}
@@ -93,6 +94,7 @@ export default class ProductEditPage extends Component {
 				throw Error(response.data.message);
 			}
 			console.log(response.data.message);
+			this.props.history.goBack();
 		} catch (err) {
 			console.log(err);
 		}

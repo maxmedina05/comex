@@ -150,7 +150,9 @@ export default class DailyMenuEditPage extends Component {
 			if (response.data.status === 'error') {
 				throw Error(response.data.message);
 			}
+
 			console.log(response.data.message);
+			this.props.history.goBack();
 		} catch (err) {
 			console.log(err);
 		}
@@ -159,7 +161,7 @@ export default class DailyMenuEditPage extends Component {
 	async updateResource() {
 		try {
 			const response = await axios.put(`/api/v1/menus/${this.state.objectId}`, {
-				description: this.state.description,
+				name: this.state.name,
 				discount: this.state.discount,
 				startTime: this.state.startTime,
 				endTime: this.state.endTime,
@@ -170,6 +172,7 @@ export default class DailyMenuEditPage extends Component {
 				throw Error(response.data.message);
 			}
 			console.log(response.data.message);
+			this.props.history.goBack();
 		} catch (err) {
 			console.log(err);
 		}
@@ -177,8 +180,6 @@ export default class DailyMenuEditPage extends Component {
 
 	handleInputChange(event) {
 		const target = event.target;
-		console.log(target);
-
 		const value = target.value;
 		const name = target.name;
 

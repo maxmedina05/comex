@@ -4,13 +4,15 @@ import axios from 'axios';
 
 import Header from './components/Header';
 import Home from './components/Home/HomePage';
-import OrdersPage from './components/Orders/OrdersPage';
+import OrderListPage from './components/Admin/Orders/OrderListPage';
+import OrderEditPage from './components/Admin/Orders/OrderEditPage';
 import ProductListPage from './components/Admin/Products/ProductListPage';
 import ProductEditPage from './components/Admin/Products/ProductEditPage';
 import MenuEditPage from './components/Admin/DailyMenu/MenuEditPage';
 import MenuListPage from './components/Admin/DailyMenu/MenuListPage';
 import RegisterPage from './components/Auth/RegisterPage';
 import LoginPage from './components/Auth/LoginPage';
+import UserProfilePage from './components/UserProfile/UserProfilePage';
 
 class App extends Component {
 	constructor(props) {
@@ -51,9 +53,15 @@ class App extends Component {
 
 					<Route exact path="/" component={Home} />
 					<div className="container">
-						<Route path="/register" component={RegisterPage} />
-						<Route path="/login" component={LoginPage} />
-						<Route path="/orders" component={OrdersPage} />
+						<Route exact path="/signup" component={RegisterPage} />
+						<Route exact path="/login" component={LoginPage} />
+						<Route
+							exact
+							path="/users/:objectId/profile"
+							component={UserProfilePage}
+						/>
+						<Route exact path="/admin/orders" component={OrderListPage} />
+						<Route path="/admin/orders/:objectId" component={OrderEditPage} />
 						<Route exact path="/admin/products" component={ProductListPage} />
 						<Route exact path="/admin/menus" component={MenuListPage} />
 						<Route

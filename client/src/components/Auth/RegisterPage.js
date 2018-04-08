@@ -7,105 +7,44 @@ export default class RegisterPage extends Component {
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.loadResource = this.loadResource.bind(this);
-		this.createNewResource = this.createNewResource.bind(this);
-		this.updateResource = this.updateResource.bind(this);
+		this.signup = this.signup.bind(this);
 
 		this.state = {
-			objectId: '0',
-			isEditMode: false,
 			email: '',
 			password: '',
-			name: '',
-			userInfo: {
-				firstName: '',
-				lastName: '',
-				companyName: '',
-				department: '',
-				address: '',
-				phone: ''
-			}
+			repeatPassword: ''
 		};
 	}
 
-	componentDidMount() {
-		const { match: { params } } = this.props;
-		if (!this.isEmpty(params)) {
-			this.setState({ isEditMode: true });
-			this.loadResource(params.objectId);
-		}
+	handleSubmit(event) {
+		event.preventDefault();
+		this.signup();
 	}
 
-	isEmpty(params) {
-		return Object.keys(params).length === 0 && params.constructor === Object;
-	}
+	async signup() {
+		const { email, password, repeatPassword } = this.state;
 
-	async loadResource(objectId) {
 		try {
-			const response = await axios.get(`/api/v1/menus/${objectId}`);
+			if (password === '' || email === '' || repeatPassword === '') {
+				throw Error('Debes llenar todos los campos');
+			}
+
+			if (repeatPassword !== password) {
+				throw Error('La Contraseña no coincide');
+			}
+
+			const response = await axios.post('/api/v1/users/signup', {
+				email,
+				password
+			});
 			const body = response.data;
 			if (body.status === 'success') {
-				this.setState({
-					objectId: body.data._id,
-					items: body.data.name,
-					startTime: body.data.startTime,
-					endTime: body.data.endTime,
-					description: body.data.description,
-					discount: body.data.discount
-				});
+				window.location.replace('/');
 			} else {
 				throw Error(body.message);
 			}
 		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	async handleSubmit(event) {
-		event.preventDefault();
-
-		if (this.state.isEditMode) {
-			this.updateResource();
-		} else {
-			this.createNewResource();
-		}
-	}
-
-	async createNewResource() {
-		try {
-			const response = await axios.post('/api/v1/menus', {
-				description: this.state.description,
-				discount: this.state.discount,
-				startTime: this.state.startTime,
-				endTime: this.state.endTime,
-				items: this.state.items
-			});
-
-			if (response.data.status === 'error') {
-				throw Error(response.data.message);
-			}
-			console.log(response.data.message);
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	async updateResource() {
-		try {
-			const response = await axios.put(`/api/v1/menus/${this.state.objectId}`, {
-				description: this.state.description,
-				discount: this.state.discount,
-				startTime: this.state.startTime,
-				endTime: this.state.endTime,
-				items: this.state.items
-			});
-
-			if (response.data.status === 'error') {
-				throw Error(response.data.message);
-			}
-			console.log(response.data.message);
-		} catch (err) {
-			console.log(err);
+			console.log(err.message || err);
 		}
 	}
 
@@ -160,92 +99,7 @@ export default class RegisterPage extends Component {
 						/>
 					</div>
 
-					{/* <div className="form-group">
-						<label htmlFor="name">Nombre y Apellido</label>
-						<input
-							className="form-control"
-							id="name"
-							name="name"
-							placeholder="Jose Perez"
-							value={this.state.name}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="company">Compañia</label>
-						<input
-							className="form-control"
-							id="company"
-							name="company"
-							placeholder="Corporación ACME"
-							value={this.state.company}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="department">Departamento</label>
-						<input
-							className="form-control"
-							id="department"
-							name="department"
-							placeholder="Recursos Humanos"
-							value={this.state.department}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="address">Dirección</label>
-						<input
-							className="form-control"
-							id="address"
-							name="address"
-							placeholder="Calle 27, #165, La Urbanización Real"
-							value={this.state.address}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="state">Estado | Provincia | Distrito</label>
-						<input
-							className="form-control"
-							id="state"
-							name="state"
-							placeholder="San Cristobal"
-							value={this.state.state}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="addressType">Tipo de Dirección</label>
-						<input
-							className="form-control"
-							id="addressType"
-							name="addressType"
-							placeholder="Oficina"
-							value={this.state.addressType}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="reference">Referencia de la dirección</label>
-						<input
-							className="form-control"
-							id="reference"
-							name="reference"
-							placeholder="Detras del Ayuntamiento"
-							value={this.state.reference}
-							onChange={this.handleInputChange}
-						/>
-					</div> */}
-
-					<button className="btn btn-primary">Guardar</button>
-					<button className="btn btn-primary">Guardar</button>
+					<button className="btn btn-primary">Iniciar</button>
 				</form>
 			</div>
 		);

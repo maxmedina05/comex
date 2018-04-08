@@ -12,7 +12,7 @@ function renderLoginOptions(isAuthenticated) {
 
 	return [
 		<li key="register">
-			<Link to="/register">Registrarse</Link>
+			<Link to="/signup">Registrarse</Link>
 		</li>,
 		<li key="login">
 			<Link to="/login">Iniciar Sessión</Link>
@@ -27,7 +27,7 @@ const Header = ({ isAuthenticated }) => {
 				<Link to="/">Menu de Hoy</Link>
 			</li>
 			<li>
-				<Link to="/orders">Ordenes</Link>
+				<Link to="/admin/orders">Ordenes</Link>
 			</li>
 			<li>
 				<Link to="/admin/products">Products</Link>

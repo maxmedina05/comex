@@ -26,7 +26,9 @@ async function getOne(req, res) {
 	const objectId = req.params.objectId;
 
 	try {
-		const resource = await Order.findOne(ObjectId(objectId));
+		const resource = await Order.findOne(ObjectId(objectId)).populate(
+			'items.product'
+		);
 		if (!resource) {
 			throw Error('Order not found!');
 		}
@@ -50,7 +52,7 @@ async function addOne(req, res) {
 		offset,
 		customer,
 		message,
-		status: 'Active',
+		status: 'Aun no procesada',
 		modifiedAt: createdAt
 	});
 
@@ -72,11 +74,11 @@ async function updateOne(req, res) {
 
 	try {
 		const resource = await Order.findOne(ObjectId(objectId));
-		resource.items = items;
+		// resource.items = items;
 		resource.modifiedAt = modifiedAt;
-		resource.customer = customer;
+		// resource.customer = customer;
 		resource.status = status;
-		resource.deliveryBoy = deliveryBoy;
+		// resource.deliveryBoy = deliveryBoy;
 		await resource.save();
 
 		res.json(
