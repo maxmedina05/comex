@@ -1,20 +1,30 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+
+const SALT_ROUNDS = 10;
 
 const UserSchema = new Schema({
 	email: String,
 	password: String,
 	role: String,
 	createdAt: { type: Date, default: Date.now },
-	modifiedAt: { type: Date, default: Date.now }
+	modifiedAt: { type: Date, default: Date.now },
+	offset: Number
 });
 
-UserSchema.methods.generateHash = password => {
-	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+// Role:
+/*
+	Customer,
+	Administrator
+*/
+
+UserSchema.methods.generateHash = async password => {
+	return await bcrypt.hash(password, SALT_ROUNDS);
 };
 
-UserSchema.methods.validatePassword = function(password) {
-	return password === this.password;
+UserSchema.methods.validatePassword = async function(password) {
+	return await bcrypt.compare(password, this.password);
 };
 
 module.exports = mongoose.model('users', UserSchema);
