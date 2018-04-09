@@ -70,7 +70,7 @@ export default class LoginPage extends Component {
 		}
 
 		return (
-			<div>
+			<div className="container">
 				<h1>Iniciar Sessión</h1>
 				<form onSubmit={this.handleSubmit}>
 					<div className="form-group">

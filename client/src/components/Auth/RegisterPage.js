@@ -101,7 +101,7 @@ export default class RegisterPage extends Component {
 								className="form-control"
 								id="lastName"
 								name="lastName"
-								placeholder="Jose Perez"
+								placeholder="Perez"
 								value={this.state.lastName}
 								onChange={this.handleInputChange}
 							/>
@@ -143,7 +143,7 @@ export default class RegisterPage extends Component {
 						/>
 					</div>
 
-					<button className="btn btn-primary">Iniciar</button>
+					<button className="btn btn-primary">Registrar</button>
 				</form>
 			</div>
 		);

@@ -2,20 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import MenuGrid from './MenuGrid';
-import Checkout from './Checkout';
+import Checkout from './Checkout.old';
 
 export default class Home extends Component {
 	constructor(props) {
 		super(props);
 
-		this.addMeal = this.addMeal.bind(this);
-		this.removeMeal = this.removeMeal.bind(this);
+		this.handleAddOrderItem = this.handleAddOrderItem.bind(this);
+		this.handleRemoveOrderItem = this.handleRemoveOrderItem.bind(this);
+		this.handleDecreaseOrderItemCount = this.handleDecreaseOrderItemCount.bind(
+			this
+		);
 		this.loadMenuData = this.loadMenuData.bind(this);
 		this.handleSubmitOrder = this.handleSubmitOrder.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 
 		this.state = {
-			meals: [],
+			orderItems: [],
 			menu: [],
 			message: ''
 		};
@@ -51,18 +54,49 @@ export default class Home extends Component {
 		}
 	}
 
-	// TODO: Prevent already existing item from being added
-	addMeal(meal) {
+	handleAddOrderItem(menuItem) {
+		let orderItem = this.state.orderItems.find(
+			x => x.product._id === menuItem._id
+		);
+		if (orderItem) {
+			orderItem.qty += 1;
+		} else {
+			orderItem = {
+				product: menuItem,
+				qty: 1
+			};
+		}
+
 		this.setState({
-			meals: [...this.state.meals, meal]
+			orderItems: [
+				...this.state.orderItems.filter(x => x.product._id !== menuItem._id),
+				orderItem
+			]
 		});
 	}
 
-	removeMeal(id) {
-		const meals = this.state.meals.filter(x => x.id !== id);
-
+	handleDecreaseOrderItemCount(menuItem) {
+		const orderItem = this.state.orderItems.find(
+			x => x.product._id === menuItem._id
+		);
+		orderItem.qty -= 1;
+		if (orderItem.qty === 0) {
+			this.handleRemoveOrderItem(menuItem);
+		}
 		this.setState({
-			meals: meals
+			orderItems: [
+				...this.state.orderItems.filter(x => x.product._id !== menuItem._id),
+				orderItem
+			]
+		});
+	}
+
+	handleRemoveOrderItem(menuItem) {
+		const orderItems = this.state.orderItems.filter(
+			x => x.product._id !== menuItem._id
+		);
+		this.setState({
+			orderItems: orderItems
 		});
 	}
 
@@ -103,12 +137,17 @@ export default class Home extends Component {
 				<div className="row">
 					<div className="col-md-9">
 						<h1>Menu de Hoy</h1>
-						<MenuGrid onAddMealClick={this.addMeal} menu={this.state.menu} />
+						<MenuGrid
+							onAddMealClick={this.handleAddOrderItem}
+							menu={this.state.menu}
+						/>
 					</div>
 					<div className="col-md-3">
 						<Checkout
-							meals={this.state.meals}
-							removeMeal={this.removeMeal}
+							orderItems={this.state.orderItems}
+							handleAddOrderItem={this.handleAddOrderItem}
+							handleRemoveOrderItem={this.handleRemoveOrderItem}
+							handleDecreaseOrderItemCount={this.handleDecreaseOrderItemCount}
 							submitOrder={this.handleSubmitOrder}
 							inputChange={this.handleInputChange}
 							onSubmit={this.handleSubmitOrder}

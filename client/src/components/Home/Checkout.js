@@ -1,30 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-function getFormattedNumber(num) {
-	return parseFloat(Math.round(num * 100) / 100).toFixed(2);
-}
-
-function computeTotalPrice(meals) {
-	var sum = 0;
-	for (const meal of meals) {
-		sum += meal.price;
-	}
-	return sum;
-}
-
-const MealTableRow = props => {
+const OrderItemRow = orderItem => {
 	return (
 		<tr>
-			<td>{props.name} </td>
-			<td>{getFormattedNumber(props.price)} DOP</td>
+			<td>{orderItem.name}</td>
+			<td> DOP</td>
 			<td />
 			<td>
-				<button
-					type="button"
-					className="close"
-					aria-label="Close"
-					onClick={() => props.removeMeal(props.id)}
-				>
+				<button type="button" className="close" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</td>
@@ -32,57 +16,48 @@ const MealTableRow = props => {
 	);
 };
 
-const Checkout = ({ meals, removeMeal, inputChange, submitOrder }) => {
+const OrderItemTable = () => {
 	return (
-		<form onSubmit={submitOrder}>
-			<h2>Caja</h2>
-			<h5>Quiero Ordernar:</h5>
-
-			<table className="table">
-				<tbody>
-					{meals.map(meal => (
-						<MealTableRow key={meal._id} {...meal} removeMeal={removeMeal} />
-					))}
-
-					<tr>
-						<td colSpan="3" />
-					</tr>
-
-					{/* <tr>
-						<td>Sub Total</td>
-						<td>0</td>
-					</tr>
-					<tr>
-						<td>Impuestos</td>
-						<td>0</td>
-					</tr> */}
-
-					<tr>
-						<td>Total</td>
-						<td>{getFormattedNumber(computeTotalPrice(meals))}</td>
-					</tr>
-				</tbody>
-			</table>
-			<div className="form-group">
-				<label htmlFor="message">Mensaje para el provedor</label>
-				<textarea
-					className="form-control"
-					name="message"
-					id="message"
-					row="3"
-					onChange={inputChange}
-				/>
-			</div>
-
-			<button type="reset" className="btn btn-danger">
-				Cancelar
-			</button>
-
-			<button type="submit" className="btn btn-primary">
-				Ordenar
-			</button>
-		</form>
+		<table className="table">
+			<tbody>
+				<tr>
+					<td colSpan="3" />
+				</tr>
+				<tr>
+					<td>Total</td>
+					<td>{0.0}</td>
+				</tr>
+			</tbody>
+		</table>
 	);
 };
 
-export default Checkout;
+export default class Checkout extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			orderItems: []
+		};
+	}
+
+	render() {
+		return (
+			<div>
+				<form>
+					<h2>Caja</h2>
+					<h5>Quiero Ordernar:</h5>
+
+					<OrderItemTable />
+
+					<button type="reset" className="btn btn-danger">
+						Cancelar
+					</button>
+					<button type="submit" className="btn btn-primary">
+						Ordenar
+					</button>
+				</form>
+			</div>
+		);
+	}
+}
