@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-const MenuGridItem = ({ item, onAddMealClick }) => {
+const MenuGridItem = ({ item, onAddOrderItemToCart }) => {
 	const product = item.product;
 
 	return (
@@ -25,7 +25,7 @@ const MenuGridItem = ({ item, onAddMealClick }) => {
 					</span>
 				</div>
 				<div className="card-footer">
-					<button type="button" onClick={() => onAddMealClick(product)}>
+					<button type="button" onClick={() => onAddOrderItemToCart(item)}>
 						Agregar
 					</button>
 				</div>

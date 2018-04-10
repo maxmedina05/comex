@@ -12,8 +12,6 @@ export default function(
 	},
 	action
 ) {
-	console.log(action);
-
 	switch (action.type) {
 		case FETCH_TODAY_MENU_REQUEST:
 			return Object.assign({}, state, { isFetching: true, hasErrors: false });

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchTodaysMenu } from '../../actions/menu.action';
+import { addOrderItemToCart } from '../../actions/checkout.action';
+
 import axios from 'axios';
 
 import MenuGrid from './MenuGrid';
-import Checkout from './Checkout.old';
+import Checkout from './Checkout';
 
 class HomePage extends Component {
 	constructor(props) {
@@ -15,7 +17,6 @@ class HomePage extends Component {
 		this.handleDecreaseOrderItemCount = this.handleDecreaseOrderItemCount.bind(
 			this
 		);
-		this.loadMenuData = this.loadMenuData.bind(this);
 		this.handleSubmitOrder = this.handleSubmitOrder.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 
@@ -26,7 +27,6 @@ class HomePage extends Component {
 	}
 
 	componentDidMount() {
-		// this.loadMenuData();
 		this.props.fetchTodaysMenu();
 	}
 
@@ -38,22 +38,6 @@ class HomePage extends Component {
 		this.setState({
 			[name]: value
 		});
-	}
-
-	async loadMenuData() {
-		try {
-			const response = await axios('/api/v1/menus/available');
-			const body = response.data;
-			if (body.status === 'success') {
-				this.setState({
-					menu: body.data.items
-				});
-			} else {
-				throw Error(body.message);
-			}
-		} catch (err) {
-			console.log(err.message || err);
-		}
 	}
 
 	handleAddOrderItem(menuItem) {
@@ -146,20 +130,15 @@ class HomePage extends Component {
 		return (
 			<div className="container-fluid">
 				<div className="row">
-					<div className="col-md-9">
+					<div className="col-md-8">
 						<h1>Menu de Hoy</h1>
-						<MenuGrid onAddMealClick={this.handleAddOrderItem} items={items} />
-					</div>
-					<div className="col-md-3">
-						<Checkout
-							orderItems={this.state.orderItems}
-							handleAddOrderItem={this.handleAddOrderItem}
-							handleRemoveOrderItem={this.handleRemoveOrderItem}
-							handleDecreaseOrderItemCount={this.handleDecreaseOrderItemCount}
-							submitOrder={this.handleSubmitOrder}
-							inputChange={this.handleInputChange}
-							onSubmit={this.handleSubmitOrder}
+						<MenuGrid
+							onAddOrderItemToCart={this.props.handleAddOrderItemToCart}
+							items={items}
 						/>
+					</div>
+					<div className="col-md-4">
+						<Checkout />
 					</div>
 				</div>
 			</div>
@@ -169,7 +148,8 @@ class HomePage extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		fetchTodaysMenu: () => dispatch(fetchTodaysMenu())
+		fetchTodaysMenu: () => dispatch(fetchTodaysMenu()),
+		handleAddOrderItemToCart: menuItem => dispatch(addOrderItemToCart(menuItem))
 	};
 }
 
