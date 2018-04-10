@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchTodaysMenu } from '../../actions/menu.action';
 import axios from 'axios';
 
 import MenuGrid from './MenuGrid';
 import Checkout from './Checkout.old';
 
-export default class Home extends Component {
+class HomePage extends Component {
 	constructor(props) {
 		super(props);
 
@@ -19,13 +21,13 @@ export default class Home extends Component {
 
 		this.state = {
 			orderItems: [],
-			menu: [],
 			message: ''
 		};
 	}
 
 	componentDidMount() {
-		this.loadMenuData();
+		// this.loadMenuData();
+		this.props.fetchTodaysMenu();
 	}
 
 	handleInputChange(event) {
@@ -103,7 +105,6 @@ export default class Home extends Component {
 	// TODO: Add real customer
 	async handleSubmitOrder(event) {
 		event.preventDefault();
-		console.log(this.state);
 		const items = this.state.meals;
 		const message = this.state.message;
 
@@ -132,15 +133,22 @@ export default class Home extends Component {
 	}
 
 	render() {
+		if (this.props.isFetching || !this.props.menu) {
+			return (
+				<div>
+					<i className="fa fa-spinner" />
+				</div>
+			);
+		}
+
+		const items = this.props.menu.items;
+
 		return (
 			<div className="container-fluid">
 				<div className="row">
 					<div className="col-md-9">
 						<h1>Menu de Hoy</h1>
-						<MenuGrid
-							onAddMealClick={this.handleAddOrderItem}
-							menu={this.state.menu}
-						/>
+						<MenuGrid onAddMealClick={this.handleAddOrderItem} items={items} />
 					</div>
 					<div className="col-md-3">
 						<Checkout
@@ -158,3 +166,16 @@ export default class Home extends Component {
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		fetchTodaysMenu: () => dispatch(fetchTodaysMenu())
+	};
+}
+
+function mapStateToProps(state) {
+	const { menu, isFetching, lastUpdated, hasErrors } = state.todaysMenu;
+	return { menu, isFetching, lastUpdated, hasErrors };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import * as actions from './actions';
 
-import AppliedRoute from './components/AppliedRoute';
 import PrivateRoute from './components/PrivateRoute';
+
 import Header from './components/Header';
 import HomePage from './components/Home/HomePage';
 import NotFoundPage from './components/NotFoundPage';
@@ -21,122 +22,53 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.userHasAuthenticated = this.userHasAuthenticated.bind(this);
-		this.isUserAuthenticated = this.isUserAuthenticated.bind(this);
-		this.state = {
-			isAuthenticated: false,
-			isAuthenticating: true,
-			objectId: '',
-			role: 'Customer'
-		};
+		this.canUserAccessPage = this.canUserAccessPage.bind(this);
 	}
 
 	componentDidMount() {
-		this.isUserAuthenticated();
+		this.props.fetchUser();
 	}
 
-	async isUserAuthenticated() {
-		try {
-			const response = await axios.get('/api/v1/auth/user');
-			const body = response.data;
-
-			if (body.status === 'error') {
-				throw Error('User is not authenticated.');
-			}
-
-			this.setState({
-				isAuthenticated: true,
-				role: body.data.role,
-				objectId: body.data.objectId
-			});
-		} catch (err) {
-			console.log(err.message || err);
-		} finally {
-			this.setState({
-				isAuthenticating: false
-			});
+	canUserAccessPage() {
+		const user = this.props.authenticatedUser;
+		if (user && user.role === 'Administrator') {
+			return true;
 		}
-	}
-
-	userHasAuthenticated(authenticatedUser) {
-		if (authenticatedUser.authenticated) {
-			this.setState({
-				isAuthenticated: authenticatedUser.authenticated,
-				role: authenticatedUser.role,
-				objectId: authenticatedUser.objectId
-			});
-		}
+		return false;
 	}
 
 	render() {
-		const childProps = {
-			isAuthenticated: this.state.isAuthenticated,
-			userHasAuthenticated: this.userHasAuthenticated
-		};
+		const isAuthenticating = this.props.authenticatedUser !== null;
 
 		return (
-			!this.state.isAuthenticating && (
+			isAuthenticating && (
 				<Router>
 					<div>
-						<Header
-							isAuthenticated={this.state.isAuthenticated}
-							objectId={this.state.objectId}
-							role={this.state.role}
-						/>
+						<Header />
 						<Switch>
 							<Route exact path="/" component={HomePage} />
-							<AppliedRoute
-								exact
-								path="/signup"
-								component={RegisterPage}
-								props={childProps}
-							/>
-							<AppliedRoute
-								exact
-								path="/login"
-								component={LoginPage}
-								props={childProps}
-							/>
+							<Route exact path="/signup" component={RegisterPage} />
+							<Route exact path="/login" component={LoginPage} />
 
-							<PrivateRoute
+							<Route
 								exact
 								path="/users/:objectId/profile"
-								isAuthenticated={this.state.isAuthenticated}
 								component={UserProfilePage}
 							/>
 							<PrivateRoute
 								exact
 								path="/admin/orders"
-								isAuthenticated={this.state.isAuthenticated}
+								canActivate={this.canUserAccessPage}
 								component={OrderListPage}
 							/>
-							<PrivateRoute
-								path="/admin/orders/:objectId"
-								isAuthenticated={this.state.isAuthenticated}
-								component={OrderEditPage}
-							/>
-							<PrivateRoute
-								exact
-								path="/admin/products"
-								isAuthenticated={this.state.isAuthenticated}
-								component={ProductListPage}
-							/>
-							<PrivateRoute
-								exact
-								path="/admin/menus"
-								isAuthenticated={this.state.isAuthenticated}
-								component={MenuListPage}
-							/>
-							<PrivateRoute
+							<Route path="/admin/orders/:objectId" component={OrderEditPage} />
+							<Route exact path="/admin/products" component={ProductListPage} />
+							<Route exact path="/admin/menus" component={MenuListPage} />
+							<Route
 								path="/admin/products/:objectId"
-								isAuthenticated={this.state.isAuthenticated}
 								component={ProductEditPage}
 							/>
-							<PrivateRoute
-								path="/admin/menus/:objectId"
-								isAuthenticated={this.state.isAuthenticated}
-								component={MenuEditPage}
-							/>
+							<Route path="/admin/menus/:objectId" component={MenuEditPage} />
 							<Route component={NotFoundPage} />
 						</Switch>
 					</div>
@@ -146,4 +78,8 @@ class App extends Component {
 	}
 }
 
-export default App;
+function mapStateToProps({ authenticatedUser }) {
+	return { authenticatedUser };
+}
+
+export default connect(mapStateToProps, actions)(App);

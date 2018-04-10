@@ -1,54 +1,65 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-function renderLoginOptions(isAuthenticated, objectId) {
-	if (isAuthenticated) {
+class Header extends Component {
+	renderAdminRoutes(authenticatedUser) {
+		if (authenticatedUser.role === 'Administrator') {
+			return [
+				<li key="orders">
+					<Link to="/admin/orders">Ordenes</Link>
+				</li>,
+				<li key="products">
+					<Link to="/admin/products">Products</Link>
+				</li>,
+				<li key="menus">
+					<Link to="/admin/menus">Menus</Link>
+				</li>
+			];
+		}
+	}
+
+	renderLoginOptions(authenticatedUser) {
+		const isAuthenticated = authenticatedUser !== null;
+
+		if (isAuthenticated) {
+			return [
+				<li key="profile">
+					<Link to={`/users/${authenticatedUser.objectId}/profile`}>
+						Mi Perfil
+					</Link>
+				</li>,
+				<li key="logout">
+					<a href="/api/v1/auth/logout">Logout</a>
+				</li>
+			];
+		}
+
 		return [
-			<li key="profile">
-				<Link to={`/users/${objectId}/profile`}>Mi Perfil</Link>
+			<li key="register">
+				<Link to="/signup">Registrarse</Link>
 			</li>,
-			<li key="logout">
-				<a href="/api/v1/auth/logout">Logout</a>
+			<li key="login">
+				<Link to="/login">Iniciar Sessión</Link>
 			</li>
 		];
 	}
 
-	return [
-		<li key="register">
-			<Link to="/signup">Registrarse</Link>
-		</li>,
-		<li key="login">
-			<Link to="/login">Iniciar Sessión</Link>
-		</li>
-	];
-}
-
-function renderAdminRoutes(userRole) {
-	if (userRole === 'Administrator') {
-		return [
-			<li key="orders">
-				<Link to="/admin/orders">Ordenes</Link>
-			</li>,
-			<li key="products">
-				<Link to="/admin/products">Products</Link>
-			</li>,
-			<li key="menus">
-				<Link to="/admin/menus">Menus</Link>
-			</li>
-		];
+	render() {
+		return (
+			<ul>
+				<li>
+					<Link to="/">Menu de Hoy</Link>
+				</li>
+				{this.renderAdminRoutes(this.props.authenticatedUser)}
+				{this.renderLoginOptions(this.props.authenticatedUser)}
+			</ul>
+		);
 	}
 }
 
-const Header = ({ isAuthenticated, role, objectId }) => {
-	return (
-		<ul>
-			<li>
-				<Link to="/">Menu de Hoy</Link>
-			</li>
-			{renderAdminRoutes(role)}
-			{renderLoginOptions(isAuthenticated, objectId)}
-		</ul>
-	);
-};
+function mapStateToProps({ authenticatedUser }) {
+	return { authenticatedUser };
+}
 
-export default Header;
+export default connect(mapStateToProps)(Header);

@@ -1,15 +1,11 @@
 import React from 'react';
 import MenuGridItem from './MenuGridItem';
 
-const MenuGrid = props => {
+const MenuGrid = ({ items, onAddMealClick }) => {
 	return (
 		<div className="row">
-			{props.menu.map((item, index) => (
-				<MenuGridItem
-					key={index}
-					item={item}
-					onAddMealClick={props.onAddMealClick}
-				/>
+			{items.map((item, index) => (
+				<MenuGridItem key={index} item={item} onAddMealClick={onAddMealClick} />
 			))}
 		</div>
 	);
