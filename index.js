@@ -9,7 +9,7 @@ const passport = require('passport');
 require('./src/services/passport.service');
 
 const loadProductResource = require('./src/resources/product/index');
-const loadDailyMenuResource = require('./src/resources/daily-menu/index');
+const loadDailyMenuResource = require('./src/resources/menu/index');
 const loadOrderResource = require('./src/resources/order/index');
 const loadUserResource = require('./src/resources/user/index');
 const RequireLogin = require('./src/middlewares/require-login');

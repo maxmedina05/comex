@@ -6,12 +6,13 @@ const MenuItem = new Schema({
 	discount: { type: Number, default: 0 }
 });
 
-const DailyMenuSchema = new Schema({
+const MenuSchema = new Schema({
 	items: [MenuItem],
 	startDate: { type: Date, default: Date.now },
 	endDate: { type: Date, default: Date.now },
+	closeTime: String,
 	offset: Number,
 	name: String
 });
 
-mongoose.model('menus', DailyMenuSchema);
+mongoose.model('menus', MenuSchema);

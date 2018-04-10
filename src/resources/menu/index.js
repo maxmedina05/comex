@@ -1,4 +1,4 @@
-const DailyMenu = require('./daily-menu.schema');
+const DailyMenu = require('./menu.schema');
 const routes = require('./menu.routes');
 
 module.exports = (app, baseUrl) => {

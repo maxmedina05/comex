@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { UserInfoSchema } = require('../user/user-info.schema');
 
 const OrderItem = new Schema({
 	product: { type: Schema.Types.ObjectId, ref: 'products' },
@@ -12,7 +13,7 @@ const OrderSchema = new Schema({
 	modifiedAt: { type: Date, default: Date.now },
 	offset: Number,
 	status: String,
-	customer: String,
+	customer: UserInfoSchema,
 	deliveryBoy: String,
 	message: String
 });

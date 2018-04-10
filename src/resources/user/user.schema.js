@@ -2,27 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
+const { UserInfoSchema } = require('./user-info.schema');
+
 const SALT_ROUNDS = 10;
-
-const CompanySchema = new Schema({
-	companyName: String,
-	department: String
-});
-
-const AddressSchema = new Schema({
-	address: String,
-	city: String,
-	state: String,
-	reference: String
-});
-
-const UserInfoSchema = new Schema({
-	firstName: String,
-	lastName: String,
-	company: CompanySchema,
-	address: AddressSchema,
-	phone: String
-});
 
 const UserSchema = new Schema({
 	email: String,

@@ -50,7 +50,7 @@ async function getMenuAvailable(req, res) {
 
 	try {
 		const resources = await DailyMenu.find({
-			endDate: { $gte: now }
+			// endDate: { $gte: now }
 		}).populate('items.product');
 		if (!resources) {
 			throw Error('Daily Menu not found!');
