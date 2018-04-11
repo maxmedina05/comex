@@ -8,15 +8,18 @@ import PrivateRoute from './components/PrivateRoute';
 import Header from './components/Header';
 import HomePage from './components/Home/HomePage';
 import NotFoundPage from './components/NotFoundPage';
+
+import RegisterPage from './components/Auth/RegisterPage';
+import LoginPage from './components/Auth/LoginPage';
+import UserProfilePage from './components/UserProfile/UserProfilePage';
+import OrderConfirmationPage from './components/Home/OrderConfirmationPage';
+
 import OrderListPage from './components/Admin/Orders/OrderListPage';
 import OrderEditPage from './components/Admin/Orders/OrderEditPage';
 import ProductListPage from './components/Admin/Products/ProductListPage';
 import ProductEditPage from './components/Admin/Products/ProductEditPage';
 import MenuEditPage from './components/Admin/DailyMenu/MenuEditPage';
 import MenuListPage from './components/Admin/DailyMenu/MenuListPage';
-import RegisterPage from './components/Auth/RegisterPage';
-import LoginPage from './components/Auth/LoginPage';
-import UserProfilePage from './components/UserProfile/UserProfilePage';
 
 class App extends Component {
 	constructor(props) {
@@ -49,11 +52,15 @@ class App extends Component {
 							<Route exact path="/" component={HomePage} />
 							<Route exact path="/signup" component={RegisterPage} />
 							<Route exact path="/login" component={LoginPage} />
-
 							<Route
 								exact
 								path="/users/:objectId/profile"
 								component={UserProfilePage}
+							/>
+							<Route
+								exact
+								path="/orders/:objectId/confirmation"
+								component={OrderConfirmationPage}
 							/>
 							<PrivateRoute
 								exact

@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import authReducer from './authReducer';
-import menuReducer from './menuReducer';
+import authReducer from './auth.reducer';
+import menuReducer from './menu.reducer';
+import checkoutReducer from './checkout.reducer';
 import orderItemsReducer from './orderItems.reducer';
 
 export default combineReducers({
 	authenticatedUser: authReducer,
 	todaysMenu: menuReducer,
+	checkout: checkoutReducer,
 	orderItems: orderItemsReducer
 });

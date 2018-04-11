@@ -20,29 +20,31 @@ class Header extends Component {
 	}
 
 	renderLoginOptions(authenticatedUser) {
-		const isAuthenticated = authenticatedUser !== null;
-
-		if (isAuthenticated) {
-			return [
-				<li key="profile">
-					<Link to={`/users/${authenticatedUser.objectId}/profile`}>
-						Mi Perfil
-					</Link>
-				</li>,
-				<li key="logout">
-					<a href="/api/v1/auth/logout">Logout</a>
-				</li>
-			];
+		const isAuthenticated = authenticatedUser;
+		switch (isAuthenticated) {
+			case null:
+				return;
+			case false:
+				return [
+					<li key="register">
+						<Link to="/signup">Registrarse</Link>
+					</li>,
+					<li key="login">
+						<Link to="/login">Iniciar Sessión</Link>
+					</li>
+				];
+			default:
+				return [
+					<li key="profile">
+						<Link to={`/users/${authenticatedUser.objectId}/profile`}>
+							Mi Perfil
+						</Link>
+					</li>,
+					<li key="logout">
+						<a href="/api/v1/auth/logout">Logout</a>
+					</li>
+				];
 		}
-
-		return [
-			<li key="register">
-				<Link to="/signup">Registrarse</Link>
-			</li>,
-			<li key="login">
-				<Link to="/login">Iniciar Sessión</Link>
-			</li>
-		];
 	}
 
 	render() {

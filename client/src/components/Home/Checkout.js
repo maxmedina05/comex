@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
 import {
 	removeOrderItemFromCart,
 	incrementOrderItemCount,
-	decrementOrderItemCount
+	decrementOrderItemCount,
+	submitOrder
 } from '../../actions/checkout.action';
 
 const OrderItemRow = ({
@@ -79,12 +82,45 @@ class Checkout extends Component {
 	constructor(props) {
 		super(props);
 
+		this.handleSubmitOrder = this.handleSubmitOrder.bind(this);
+		this.handleInputChange = this.handleInputChange.bind(this);
+
 		this.state = {
 			message: ''
 		};
 	}
 
+	handleInputChange(event) {
+		const target = event.target;
+		const value = target.value;
+		const name = target.name;
+
+		this.setState({
+			[name]: value
+		});
+	}
+
+	handleSubmitOrder(event) {
+		event.preventDefault();
+		if (this.props.orderItems && this.props.orderItems.length >= 0) {
+			this.props.submitOrder(this.props.orderItems);
+		}
+	}
+
 	render() {
+		const redirectToOrderConfirmation = this.props.order !== null;
+
+		if (redirectToOrderConfirmation) {
+			return (
+				<Redirect
+					to={{
+						pathname: `/orders/${this.props.order._id}/confirmation`,
+						state: { from: this.props.location }
+					}}
+				/>
+			);
+		}
+
 		return (
 			<div>
 				<form>
@@ -111,13 +147,19 @@ class Checkout extends Component {
 							name="message"
 							id="message"
 							row="3"
+							value={this.state.message}
+							onChange={this.handleInputChange}
 						/>
 					</div>
 					<button type="reset" className="btn btn-danger">
 						Cancelar
 					</button>
-					<button type="submit" className="btn btn-primary">
-						Ordenar
+					<button
+						type="submit"
+						className="btn btn-primary"
+						onClick={this.handleSubmitOrder}
+					>
+						Siguiente
 					</button>
 				</form>
 			</div>
@@ -126,7 +168,13 @@ class Checkout extends Component {
 }
 
 function mapStateToProps(state) {
-	return { orderItems: state.orderItems };
+	const { isSubmitting, hasErrors, order } = state.checkout;
+	return {
+		order,
+		orderItems: state.orderItems,
+		isSubmitting,
+		hasErrors
+	};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -136,7 +184,9 @@ function mapDispatchToProps(dispatch) {
 		handleIncrementOrderItemCount: orderItem =>
 			dispatch(incrementOrderItemCount(orderItem)),
 		handleDecrementOrderItemCount: orderItem =>
-			dispatch(decrementOrderItemCount(orderItem))
+			dispatch(decrementOrderItemCount(orderItem)),
+		submitOrder: (items, shippingAddress, message) =>
+			dispatch(submitOrder(items, shippingAddress, message))
 	};
 }
 

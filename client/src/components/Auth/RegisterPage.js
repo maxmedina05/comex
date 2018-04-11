@@ -41,11 +41,6 @@ export default class RegisterPage extends Component {
 			});
 			const body = response.data;
 			if (body.status === 'success') {
-				this.props.userHasAuthenticated({
-					authenticated: true,
-					role: body.data.role,
-					objectId: body.data.objectId
-				});
 				this.setState({
 					redirectToReferrer: true
 				});

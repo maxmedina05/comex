@@ -13,7 +13,7 @@ const AddressSchema = new Schema({
 	reference: String
 });
 
-const UserInfoSchema = new Schema({
+const PersonSchema = new Schema({
 	firstName: String,
 	lastName: String,
 	company: CompanySchema,
@@ -22,7 +22,7 @@ const UserInfoSchema = new Schema({
 });
 
 module.exports = {
-	UserInfoSchema: UserInfoSchema,
+	UserInfoSchema: PersonSchema,
 	AddressSchema: AddressSchema,
 	CompanySchema: CompanySchema
 };

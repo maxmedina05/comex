@@ -2,7 +2,8 @@ import {
 	ADD_ORDER_ITEM_TO_CART,
 	REMOVE_ORDER_ITEM_FROM_CART,
 	INCREMENT_ORDER_ITEM_COUNT,
-	DECREMENT_ORDER_ITEM_COUNT
+	DECREMENT_ORDER_ITEM_COUNT,
+	CLEAR_CART
 } from '../actions/types';
 
 function handleAddOrderItemToCart(state, action) {
@@ -59,6 +60,8 @@ export default function(state = [], action) {
 			return handleIncrementOrderItemCount(state, action);
 		case DECREMENT_ORDER_ITEM_COUNT:
 			return handleDecrementOrderItemCount(state, action);
+		case CLEAR_CART:
+			return [];
 		default:
 			return state;
 	}

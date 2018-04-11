@@ -41,25 +41,24 @@ async function getOne(req, res) {
 }
 
 async function addOne(req, res) {
-	const { items, createdAt, customer, message } = req.body;
+	const { items, createdAt, message } = req.body;
 
 	const date = new Date(createdAt);
 	const offset = date.getTimezoneOffset();
 
-	const resource = new Order({
+	const order = new Order({
 		items,
 		createdAt,
 		offset,
-		customer,
 		message,
-		status: 'Aun no procesada',
-		modifiedAt: createdAt
+		user: req.user._id,
+		modifiedAt: createdAt,
+		status: 'Aun no procesada'
 	});
-
 	try {
-		await resource.save();
+		await order.save();
 		res.json(
-			makeResponseBody('success', resource, 'Order created successfully!', 1)
+			makeResponseBody('success', order, 'Order created successfully!', 1)
 		);
 	} catch (err) {
 		res
