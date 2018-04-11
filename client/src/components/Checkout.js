@@ -7,7 +7,7 @@ import {
 	incrementOrderItemCount,
 	decrementOrderItemCount,
 	submitOrder
-} from '../../actions/checkout.action';
+} from '../actions/checkout.action';
 
 const OrderItemRow = ({
 	item,

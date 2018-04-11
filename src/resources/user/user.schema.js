@@ -22,6 +22,20 @@ const UserSchema = new Schema({
 	Administrator
 */
 
+UserSchema.methods.getName = function() {
+	if (!this.userInfo) {
+		return 'No Name';
+	}
+	return this.userInfo.firstName;
+};
+
+UserSchema.methods.fullName = function() {
+	if (!userInfo) {
+		return 'No Name';
+	}
+	return this.userInfo.firstName + this.userInfo.lastName;
+};
+
 UserSchema.methods.generateHash = async password => {
 	return await bcrypt.hash(password, SALT_ROUNDS);
 };

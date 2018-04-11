@@ -1,9 +1,48 @@
-import { FETCH_USER } from '../actions/types';
+import {
+	FETCH_USER,
+	SUBMIT_LOGIN_REQUEST,
+	SUBMIT_LOGIN_FAILURE,
+	SUBMIT_LOGIN_SUCCESS
+} from '../actions/types';
 
-export default function(state = null, action) {
+export default function(
+	state = {
+		payload: null,
+		redirectToReferrer: false,
+		isLoading: false,
+		hasErrors: false
+	},
+	action
+) {
 	switch (action.type) {
 		case FETCH_USER:
-			return action.payload || false;
+			return {
+				payload: action.payload || false,
+				isLoading: false,
+				hasErrors: false
+			};
+		case SUBMIT_LOGIN_REQUEST:
+			return {
+				payload: null,
+				isLoading: true,
+				hasErrors: false,
+				redirectToReferrer: false
+			};
+		case SUBMIT_LOGIN_SUCCESS:
+			return {
+				payload: action.payload,
+				redirectToReferrer: true,
+				isLoading: false,
+				hasErrors: false
+			};
+		case SUBMIT_LOGIN_FAILURE:
+			return {
+				payload: null,
+				isLoading: false,
+				hasErrors: true,
+				redirectToReferrer: false,
+				error: action.error
+			};
 		default:
 			return state;
 	}

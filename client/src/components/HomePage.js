@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodaysMenu } from '../../actions/menu.action';
-import { addOrderItemToCart } from '../../actions/checkout.action';
+import { fetchTodaysMenu } from '../actions/menu.action';
+import { addOrderItemToCart } from '../actions/checkout.action';
 
-import MenuGrid from './MenuGrid';
+import MenuGrid from './MenuGrid/MenuGrid';
 import Checkout from './Checkout';
 
 class HomePage extends Component {

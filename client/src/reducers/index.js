@@ -5,7 +5,7 @@ import checkoutReducer from './checkout.reducer';
 import orderItemsReducer from './orderItems.reducer';
 
 export default combineReducers({
-	authenticatedUser: authReducer,
+	authentication: authReducer,
 	todaysMenu: menuReducer,
 	checkout: checkoutReducer,
 	orderItems: orderItemsReducer

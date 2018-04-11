@@ -10,7 +10,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 	res.json(
 		makeResponseBody(
 			'success',
-			{ objectId: _id, email, role },
+			{ objectId: _id, email, role, name: req.user.getName() },
 			'Logged in successfully!',
 			1
 		)
@@ -25,7 +25,7 @@ router.get('/user', (req, res) => {
 		res.json(
 			makeResponseBody(
 				'success',
-				{ objectId: _id, email, role },
+				{ objectId: _id, email, role, name: req.user.getName() },
 				'User is authenticated!',
 				1
 			)

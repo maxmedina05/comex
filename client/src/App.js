@@ -6,13 +6,13 @@ import * as actions from './actions';
 import PrivateRoute from './components/PrivateRoute';
 
 import Header from './components/Header';
-import HomePage from './components/Home/HomePage';
+import HomePage from './components/HomePage';
 import NotFoundPage from './components/NotFoundPage';
 
 import RegisterPage from './components/Auth/RegisterPage';
 import LoginPage from './components/Auth/LoginPage';
 import UserProfilePage from './components/UserProfile/UserProfilePage';
-import OrderConfirmationPage from './components/Home/OrderConfirmationPage';
+import OrderConfirmationPage from './components/OrderConfirmationPage';
 
 import OrderListPage from './components/Admin/Orders/OrderListPage';
 import OrderEditPage from './components/Admin/Orders/OrderEditPage';

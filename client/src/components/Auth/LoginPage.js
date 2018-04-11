@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
+import { submitLogin } from '../../actions/auth.action';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 
@@ -17,32 +18,10 @@ export default class LoginPage extends Component {
 		};
 	}
 
-	async login() {
-		const { email, password } = this.state;
-
-		try {
-			const response = await axios.post('/api/v1/auth/login', {
-				email,
-				password
-			});
-
-			const body = response.data;
-
-			if (body.status === 'success') {
-				this.setState({
-					redirectToReferrer: true
-				});
-			} else {
-				throw Error(body.message);
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
 	handleSubmit(event) {
 		event.preventDefault();
-		this.login();
+		const { email, password } = this.state;
+		this.props.login(email, password);
 	}
 
 	handleInputChange(event) {
@@ -56,7 +35,7 @@ export default class LoginPage extends Component {
 
 	render() {
 		const { from } = this.props.location.state || { from: { pathname: '/' } };
-		const { redirectToReferrer } = this.state;
+		const { redirectToReferrer } = this.props;
 
 		if (redirectToReferrer) {
 			if (redirectToReferrer) {
@@ -100,3 +79,20 @@ export default class LoginPage extends Component {
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		login: (email, password) => dispatch(submitLogin(email, password))
+	};
+}
+
+function mapStateToProps(state) {
+	const {
+		payload,
+		redirectToReferrer,
+		isLoading,
+		hasErrors
+	} = state.authentication;
+	return { payload, redirectToReferrer, isLoading, hasErrors };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
