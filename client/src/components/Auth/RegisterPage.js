@@ -10,19 +10,12 @@ class RegisterPage extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 
-		// this.state = {
-		// 	firstName: '',
-		// 	lastName: '',
-		// 	email: '',
-		// 	password: '',
-		// 	repeatPassword: ''
-		// };
 		this.state = {
-			firstName: 'Admin',
-			lastName: 'Admin',
-			email: 'admin@example.com',
-			password: 'admin',
-			repeatPassword: 'admin'
+			firstName: '',
+			lastName: '',
+			email: '',
+			password: '',
+			repeatPassword: ''
 		};
 	}
 

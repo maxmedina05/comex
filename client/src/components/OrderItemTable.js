@@ -8,12 +8,13 @@ const OrderItemRow = ({
 	handleDecrementOrderItemCount
 }) => {
 	const { product, qty } = item;
+
 	return (
 		<tr>
 			<td>{qty} x</td>
 			<td>{product.name} </td>
 			<td>{product.price} DOP</td>
-			{hideActions && (
+			{!hideActions && (
 				<td>
 					<button
 						className="btn btn-light"

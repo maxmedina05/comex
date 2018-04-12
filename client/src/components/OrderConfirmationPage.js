@@ -1,9 +1,26 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { OrderItemTable } from './OrderItemTable';
 
 class OrderConfirmationPage extends Component {
+	constructor(props) {
+		super(props);
+
+		this.handleGoBackClick = this.handleGoBackClick.bind(this);
+
+		this.state = {
+			redirectToReferer: false
+		};
+	}
+
+	handleGoBackClick() {
+		this.setState({
+			redirectToReferer: true
+		});
+	}
+
 	render() {
 		const order = {
 			totalPrice: 0,
@@ -40,6 +57,12 @@ class OrderConfirmationPage extends Component {
 				fullName: 'Max Medina'
 			}
 		};
+		const { from } = this.props.location.state || { from: { pathname: '/' } };
+		const { redirectToReferrer } = this.props;
+
+		if (redirectToReferrer === true) {
+			return <Redirect to={from} />;
+		}
 
 		return (
 			<div className="container">
@@ -116,6 +139,8 @@ class OrderConfirmationPage extends Component {
 				</div>
 				<h5>Productos</h5>
 				<OrderItemTable items={order.items} hideActions={true} />
+
+				<button className="btn btn-info">Regresar</button>
 			</div>
 		);
 	}
