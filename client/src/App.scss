@@ -1,0 +1,17 @@
+@import 'bootswatch/dist/flatly/_variables.scss';
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'bootswatch/dist/flatly/_bootswatch.scss';
+
+@media print {
+	.no-print,
+	.no-print * {
+		display: none !important;
+	}
+}
+.primary {
+	background-color: #ba1f33 !important;
+}
+
+.accent {
+	background-color: #f58c38 !important;
+}

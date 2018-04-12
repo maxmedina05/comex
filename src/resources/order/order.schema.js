@@ -28,5 +28,12 @@ const OrderSchema = new Schema({
   Dispatched,
   Delivered
 */
+OrderSchema.methods.computeTotalPrice = function() {
+	let total = 0;
+	for (const item of this.items) {
+		total += Math.abs(item.unitPrice - item.discount) * item.qty;
+	}
+	return total;
+};
 
 mongoose.model('orders', OrderSchema);

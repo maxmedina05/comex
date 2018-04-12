@@ -62,6 +62,8 @@ export default class LoginModal extends Component {
 	}
 
 	render() {
+		const isUserRegistering = window.location.pathname === '/signup';
+
 		if (this.state.redirectToSignupPage) {
 			return <Redirect to="/signup" />;
 		}
@@ -72,8 +74,10 @@ export default class LoginModal extends Component {
 					Iniciar Sessión
 				</NavLink>
 				<Modal
-					// isOpen={!this.props.isAuthenticated || this.state.showModal}
-					isOpen={this.state.showModal}
+					isOpen={
+						(!isUserRegistering && !this.props.isAuthenticated) ||
+						this.state.showModal
+					}
 					toggle={this.toggle}
 					className={this.props.className}
 				>
@@ -104,6 +108,8 @@ export default class LoginModal extends Component {
 									onChange={this.handleInputChange}
 								/>
 							</div>
+
+							<div />
 						</form>
 					</ModalBody>
 					<ModalFooter>

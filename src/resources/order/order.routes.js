@@ -60,9 +60,29 @@ async function addOne(req, res) {
 		status: 'Aun no procesada'
 	});
 	try {
-		await order.save();
+		// await order.save();
+
+		let createdOrder = {
+			totalPrice: order.computeTotalPrice(),
+			items,
+			createdAt,
+			shippingAddress: {
+				address: 'Calle Enriquillo, #107',
+				city: 'Santo Domingo',
+				state: 'Santo Domingo',
+				reference: 'Frente al colmado Don Ramon'
+			},
+			customerName: req.user.getFullName(),
+			message
+		};
+
 		res.json(
-			makeResponseBody('success', order, 'Order created successfully!', 1)
+			makeResponseBody(
+				'success',
+				createdOrder,
+				'Order created successfully!',
+				1
+			)
 		);
 	} catch (err) {
 		res

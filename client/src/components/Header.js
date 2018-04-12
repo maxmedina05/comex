@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { submitLogin } from '../actions/auth.action';
-import LoginModal from './LoginModal';
+// import LoginModal from './LoginModal';
 import {
 	Collapse,
 	Navbar,
@@ -64,10 +64,13 @@ class Header extends Component {
 						</NavLink>
 					</NavItem>,
 					<NavItem key="login">
-						<LoginModal
+						<NavLink tag={Link} to="/login">
+							Iniciar Sessión
+						</NavLink>
+						{/* <LoginModal
 							isAuthenticated={isAuthenticated}
 							handleLogin={this.props.login}
-						/>
+						/> */}
 					</NavItem>
 				];
 			default: {

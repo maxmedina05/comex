@@ -17,6 +17,8 @@ export const addOrderItemToCart = menuItem => ({
 	type: ADD_ORDER_ITEM_TO_CART,
 	id: nextOrderItemId++,
 	product: menuItem.product,
+	unitPrice: menuItem.product.price,
+	discount: menuItem.discount,
 	qty: 1
 });
 

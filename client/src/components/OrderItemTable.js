@@ -1,5 +1,17 @@
 import React from 'react';
 
+function computeTotalPrice(items) {
+	let total = 0;
+	for (const item of items) {
+		total += computePrice(item);
+	}
+	return total;
+}
+
+function computePrice(item) {
+	return Math.abs(item.unitPrice - item.discount) * item.qty;
+}
+
 const OrderItemRow = ({
 	item,
 	hideActions,
@@ -13,7 +25,7 @@ const OrderItemRow = ({
 		<tr>
 			<td>{qty} x</td>
 			<td>{product.name} </td>
-			<td>{product.price} DOP</td>
+			<td>{computePrice(item)} DOP</td>
 			{!hideActions && (
 				<td>
 					<button
@@ -55,7 +67,7 @@ export const OrderItemTable = ({
 			<tbody>
 				{items.map(item => (
 					<OrderItemRow
-						key={item._id}
+						key={item.id}
 						item={item}
 						hideActions={hideActions}
 						handleRemoveOrderItemFromCart={handleRemoveOrderItemFromCart}
@@ -68,7 +80,7 @@ export const OrderItemTable = ({
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td>{0.0}</td>
+					<td>{computeTotalPrice(items)}</td>
 				</tr>
 			</tbody>
 		</table>

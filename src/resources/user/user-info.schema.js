@@ -2,23 +2,23 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CompanySchema = new Schema({
-	companyName: String,
-	department: String
+	companyName: { type: String, default: '' },
+	department: { type: String, default: '' }
 });
 
 const AddressSchema = new Schema({
-	address: String,
-	city: String,
-	state: String,
-	reference: String
+	address: { type: String, default: '' },
+	city: { type: String, default: '' },
+	state: { type: String, default: '' },
+	reference: { type: String, default: '' }
 });
 
 const PersonSchema = new Schema({
-	firstName: String,
-	lastName: String,
+	firstName: { type: String, default: '' },
+	lastName: { type: String, default: '' },
 	company: CompanySchema,
 	address: AddressSchema,
-	phone: String
+	phone: { type: String, default: '' }
 });
 
 module.exports = {

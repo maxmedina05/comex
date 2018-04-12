@@ -120,7 +120,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="firstName"
 							name="firstName"
-							placeholder="Jose"
 							value={this.state.firstName}
 							onChange={this.handleInputChange}
 						/>
@@ -131,7 +130,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="lastName"
 							name="lastName"
-							placeholder="Perez"
 							value={this.state.lastName}
 							onChange={this.handleInputChange}
 						/>
@@ -143,7 +141,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="companyName"
 							name="companyName"
-							placeholder="Corporación ACME"
 							value={this.state.companyName}
 							onChange={this.handleInputChange}
 						/>
@@ -155,7 +152,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="department"
 							name="department"
-							placeholder="Tecgnología"
 							value={this.state.department}
 							onChange={this.handleInputChange}
 						/>
@@ -167,7 +163,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="address"
 							name="address"
-							placeholder="Calle Enriquillo"
 							value={this.state.address}
 							onChange={this.handleInputChange}
 						/>
@@ -179,7 +174,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="state"
 							name="state"
-							placeholder="Santo Domingo"
 							value={this.state.state}
 							onChange={this.handleInputChange}
 						/>
@@ -191,7 +185,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="reference"
 							name="reference"
-							placeholder="Proxímo a la autopista Las America"
 							value={this.state.reference}
 							onChange={this.handleInputChange}
 						/>
@@ -203,7 +196,6 @@ export default class UserProfilePage extends Component {
 							className="form-control"
 							id="phone"
 							name="phone"
-							placeholder="(809) 555-5655"
 							value={this.state.phone}
 							onChange={this.handleInputChange}
 						/>

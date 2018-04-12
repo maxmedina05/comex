@@ -10,7 +10,7 @@ const MenuItemTableRow = ({ product, discount, handleRemoveProductAction }) => {
 			<td>{product._id.substr(-4)}</td>
 			<td>{product.name}</td>
 			<td>{product.price}</td>
-			<td>{discount}</td>
+			{/* <td>{discount}</td> */}
 			<td>
 				<button
 					className="btn btn-warning"
@@ -31,7 +31,7 @@ const MenuItemTable = ({ items, handleRemoveProductAction }) => {
 					<th>Id</th>
 					<th>Nombre</th>
 					<th>Precio</th>
-					<th>Descuento</th>
+					{/* <th>Descuento</th> */}
 					<th>Acciones</th>
 				</tr>
 			</thead>
@@ -237,7 +237,7 @@ export default class DailyMenuEditPage extends Component {
 							onChange={this.handleEndDateChange}
 						/>
 					</div>
-					<div className="form-group">
+					{/* <div className="form-group">
 						<label htmlFor="discount">Descuento General</label>
 						<input
 							type="number"
@@ -247,7 +247,7 @@ export default class DailyMenuEditPage extends Component {
 							value={this.state.discount}
 							onChange={this.handleInputChange}
 						/>
-					</div>
+					</div> */}
 
 					<div className="form-group">
 						<label htmlFor="product">Product a agregar</label>

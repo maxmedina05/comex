@@ -9,17 +9,20 @@ import {
 function handleAddOrderItemToCart(state, action) {
 	const existingItem = state.find(x => x.product._id === action.product._id);
 	if (existingItem) {
-		return [
-			...state.filter(x => x.product._id !== action.product._id),
-			{ ...existingItem, qty: existingItem.qty + 1 }
-		];
+		return handleIncrementOrderItemCount(state, {
+			type: INCREMENT_ORDER_ITEM_COUNT,
+			id: existingItem.id,
+			qty: existingItem.qty + 1
+		});
 	}
 	return [
 		...state,
 		{
 			id: action.id,
 			product: action.product,
-			qty: action.qty
+			qty: action.qty,
+			unitPrice: action.unitPrice,
+			discount: action.discount
 		}
 	];
 }

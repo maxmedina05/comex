@@ -22,47 +22,17 @@ class OrderConfirmationPage extends Component {
 	}
 
 	render() {
-		const order = {
-			totalPrice: 0,
-			message: '',
-			items: [
-				{
-					qty: 1,
-					discount: 0,
-					unitPrice: 0,
-					_id: '5acebcb7a496982f6cfff699',
-					product: {
-						_id: '5ac6a567eaf0f440d490215d',
-						name: 'Jugo de Chinola',
-						price: 50,
-						__v: 0
-					}
-				}
-			],
-			createdAt: moment(new Date('2018-04-12T01:56:07.792Z')).format(
-				'ddd Do, MMMM YYYY | hh:mm a'
-			),
-			modifiedAt: '2018-04-12T01:56:07.792Z',
-			_id: '5acebcb7a496982f6cfff698',
-			offset: 240,
-			shippingAddress: {
-				address: 'Calle Enriquillo, #107',
-				city: 'Santo Domingo',
-				state: 'Santo Domingo',
-				reference: 'Frente al colmado Don Ramon'
-			},
-			user: {
-				_id: '5acebe6b1dfc4649e087ccc0',
-				email: 'admin@example.com',
-				fullName: 'Max Medina'
-			}
-		};
-		const { from } = this.props.location.state || { from: { pathname: '/' } };
+		let order = this.props.order;
+		// const { from } = this.props.location.state || { from: { pathname: '/' } };
 		const { redirectToReferrer } = this.props;
 
-		if (redirectToReferrer === true) {
-			return <Redirect to={from} />;
+		if (order === null || redirectToReferrer === true) {
+			return <Redirect to="/" />;
 		}
+
+		order.createdAt = moment(new Date(order.createdAt)).format(
+			'ddd Do, MMMM YYYY | hh:mm a'
+		);
 
 		return (
 			<div className="container">
@@ -91,7 +61,7 @@ class OrderConfirmationPage extends Component {
 							name="fullName"
 							type="fullName"
 							readOnly
-							value={order.user.fullName}
+							value={order.customerName}
 						/>
 					</div>
 				</div>

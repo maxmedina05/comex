@@ -29,11 +29,11 @@ UserSchema.methods.getName = function() {
 	return this.userInfo.firstName;
 };
 
-UserSchema.methods.fullName = function() {
-	if (!userInfo) {
+UserSchema.methods.getFullName = function() {
+	if (!this.userInfo) {
 		return 'No Name';
 	}
-	return this.userInfo.firstName + this.userInfo.lastName;
+	return this.userInfo.firstName + ' ' + this.userInfo.lastName;
 };
 
 UserSchema.methods.generateHash = async password => {
