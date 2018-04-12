@@ -25,7 +25,8 @@ passport.use(
 				return done(null, false, { message: 'No user found!' });
 			}
 
-			if (!existingUser.validatePassword(password)) {
+			const isPasswordValid = await existingUser.validatePassword(password);
+			if (!isPasswordValid) {
 				return done(null, false, { message: 'Incorrect email or password.' });
 			}
 

@@ -12,6 +12,8 @@ export default function(
 	},
 	action
 ) {
+	console.log('action: ', action);
+	console.log('state: ', state);
 	switch (action.type) {
 		case SUBMIT_ORDER_REQUEST:
 			return Object.assign({}, state, { isSubmitting: true, hasErrors: false });

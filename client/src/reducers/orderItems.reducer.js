@@ -50,7 +50,6 @@ function handleDecrementOrderItemCount(state, action) {
 }
 
 export default function(state = [], action) {
-	console.log(action);
 	switch (action.type) {
 		case ADD_ORDER_ITEM_TO_CART:
 			return handleAddOrderItemToCart(state, action);

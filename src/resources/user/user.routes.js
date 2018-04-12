@@ -17,8 +17,10 @@ async function signup(req, res) {
 
 		const user = new User({
 			email,
-			firstName: firstName,
-			lastName: lastName,
+			userInfo: {
+				firstName,
+				lastName
+			},
 			role: 'Customer'
 		});
 		const hashPassword = await user.generateHash(password);
@@ -30,12 +32,17 @@ async function signup(req, res) {
 				throw Error(err.message || err);
 			}
 			res.json(
-				makeResponseBody('success', user, 'User created successfully!', 1)
+				makeResponseBody(
+					'success',
+					{ ...user, name: user.getName() },
+					'User created successfully!',
+					1
+				)
 			);
 		});
 	} catch (err) {
 		res
-			.status(422)
+			// .status(422)
 			.json(makeResponseBody('error', null, err.message || err, 0));
 	}
 }

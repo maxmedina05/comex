@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import { fetchUser } from './actions/auth.action';
 
 import PrivateRoute from './components/PrivateRoute';
 
@@ -33,7 +33,7 @@ class App extends Component {
 	}
 
 	canUserAccessPage() {
-		const user = this.props.authenticatedUser;
+		const user = this.props.authentication.payload;
 		if (user && user.role === 'Administrator') {
 			return true;
 		}
@@ -41,7 +41,7 @@ class App extends Component {
 	}
 
 	render() {
-		const isAuthenticating = this.props.authenticatedUser !== null;
+		const isAuthenticating = this.props.authentication.payload !== null;
 
 		return (
 			isAuthenticating && (
@@ -85,8 +85,14 @@ class App extends Component {
 	}
 }
 
-function mapStateToProps({ authenticatedUser }) {
-	return { authenticatedUser };
+function mapDispatchToProps(dispatch) {
+	return {
+		fetchUser: () => dispatch(fetchUser())
+	};
 }
 
-export default connect(mapStateToProps, actions)(App);
+function mapStateToProps({ authentication }) {
+	return { authentication };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

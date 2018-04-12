@@ -27,7 +27,7 @@ export default function(
 		case SUBMIT_REGISTER_REQUEST:
 		case SUBMIT_LOGIN_REQUEST:
 			return {
-				payload: false,
+				payload: null,
 				isLoading: true,
 				hasErrors: false,
 				redirectToReferrer: false
@@ -36,18 +36,18 @@ export default function(
 		case SUBMIT_LOGIN_SUCCESS:
 			return {
 				payload: action.payload,
+				redirectToReferrer: true,
 				isLoading: false,
-				hasErrors: false,
-				redirectToReferrer: true
+				hasErrors: false
 			};
 		case SUBMIT_REGISTER_FAILURE:
 		case SUBMIT_LOGIN_FAILURE:
 			return {
-				payload: false,
+				payload: null,
 				isLoading: false,
 				hasErrors: true,
-				error: action.error,
-				redirectToReferrer: false
+				redirectToReferrer: false,
+				error: action.error
 			};
 		default:
 			return state;

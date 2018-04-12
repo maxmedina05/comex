@@ -1,54 +1,47 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
+import { submitRegister } from '../../actions/auth.action';
 
-export default class RegisterPage extends Component {
+class RegisterPage extends Component {
 	constructor(props) {
 		super(props);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.signup = this.signup.bind(this);
 
+		// this.state = {
+		// 	firstName: '',
+		// 	lastName: '',
+		// 	email: '',
+		// 	password: '',
+		// 	repeatPassword: ''
+		// };
 		this.state = {
-			email: '',
-			password: '',
-			repeatPassword: '',
-			redirectToReferrer: false
+			firstName: 'Admin',
+			lastName: 'Admin',
+			email: 'admin@example.com',
+			password: 'admin',
+			repeatPassword: 'admin'
 		};
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.signup();
-	}
+		const { firstName, lastName, email, password, repeatPassword } = this.state;
 
-	async signup() {
-		const { email, password, repeatPassword } = this.state;
-
-		try {
-			if (password === '' || email === '' || repeatPassword === '') {
-				throw Error('Debes llenar todos los campos');
-			}
-
-			if (repeatPassword !== password) {
-				throw Error('La Contraseña no coincide');
-			}
-
-			const response = await axios.post('/api/v1/users/signup', {
+		if (password !== repeatPassword) {
+			console.error('La Contraseña no coincide');
+		} else {
+			const registrationForm = {
+				firstName,
+				lastName,
 				email,
-				password
-			});
-			const body = response.data;
-			if (body.status === 'success') {
-				this.setState({
-					redirectToReferrer: true
-				});
-			} else {
-				throw Error(body.message);
-			}
-		} catch (err) {
-			console.log(err.message || err);
+				password,
+				repeatPassword
+			};
+
+			this.props.register(registrationForm);
 		}
 	}
 
@@ -64,42 +57,40 @@ export default class RegisterPage extends Component {
 
 	render() {
 		const { from } = this.props.location.state || { from: { pathname: '/' } };
-		const { redirectToReferrer } = this.state;
+		const { redirectToReferrer } = this.props;
 
-		if (redirectToReferrer) {
-			if (redirectToReferrer) {
-				return <Redirect to={from} />;
-			}
+		if (redirectToReferrer === true) {
+			return <Redirect to={from} />;
 		}
 
 		return (
 			<div className="container">
-				<h1>{this.state.isEditMode ? 'Editar Perfil' : 'Crear una cuenta'}</h1>
+				<h1>Registro</h1>
 				<form onSubmit={this.handleSubmit}>
-					<div className="row">
-						<div className="col">
-							<label htmlFor="firstName">Nombre</label>
-							<input
-								required
-								className="form-control"
-								id="firstName"
-								name="firstName"
-								placeholder="Jose"
-								value={this.state.firstName}
-								onChange={this.handleInputChange}
-							/>
-						</div>
-						<div className="col">
-							<label htmlFor="lastName">Apellido</label>
-							<input
-								required
-								className="form-control"
-								id="lastName"
-								name="lastName"
-								placeholder="Perez"
-								value={this.state.lastName}
-								onChange={this.handleInputChange}
-							/>
+					<div className="form-group">
+						<div className="row">
+							<div className="col">
+								<label htmlFor="firstName">Nombre</label>
+								<input
+									required
+									className="form-control"
+									name="firstName"
+									placeholder="Jose"
+									value={this.state.firstName}
+									onChange={this.handleInputChange}
+								/>
+							</div>
+							<div className="col">
+								<label htmlFor="lastName">Apellido</label>
+								<input
+									required
+									className="form-control"
+									name="lastName"
+									placeholder="Perez"
+									value={this.state.lastName}
+									onChange={this.handleInputChange}
+								/>
+							</div>
 						</div>
 					</div>
 					<div className="form-group">
@@ -107,7 +98,6 @@ export default class RegisterPage extends Component {
 						<input
 							required
 							className="form-control"
-							id="email"
 							name="email"
 							type="email"
 							placeholder="jose.perez@example.com"
@@ -119,7 +109,6 @@ export default class RegisterPage extends Component {
 						<label htmlFor="password">Contraseña</label>
 						<input
 							className="form-control"
-							id="password"
 							name="password"
 							type="password"
 							value={this.state.password}
@@ -144,3 +133,21 @@ export default class RegisterPage extends Component {
 		);
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		register: form => dispatch(submitRegister(form))
+	};
+}
+
+function mapStateToProps(state) {
+	const {
+		payload,
+		redirectToReferrer,
+		isLoading,
+		hasErrors
+	} = state.authentication;
+	return { payload, redirectToReferrer, isLoading, hasErrors };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

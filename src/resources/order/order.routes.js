@@ -26,9 +26,13 @@ async function getOne(req, res) {
 	const objectId = req.params.objectId;
 
 	try {
-		const resource = await Order.findOne(ObjectId(objectId)).populate(
-			'items.product'
-		);
+		let resource = await Order.findOne(ObjectId(objectId))
+			.populate('items.product')
+			.populate('user');
+		resource.user = {
+			email: resource.user.email,
+			userInfo: resource.user.userInfo
+		};
 		if (!resource) {
 			throw Error('Order not found!');
 		}

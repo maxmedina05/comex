@@ -26,6 +26,7 @@ class Header extends Component {
 			isOpen: false
 		};
 	}
+
 	toggle() {
 		this.setState({
 			isOpen: !this.state.isOpen
@@ -49,9 +50,12 @@ class Header extends Component {
 	}
 
 	renderLoginOptions(authentication) {
-		const isAuthenticated =
-			authentication.payload !== null && authentication.payload !== false;
+		if (authentication.payload == null) {
+			return;
+		}
+		const isAuthenticated = authentication.payload !== false;
 		switch (isAuthenticated) {
+			case null:
 			case false:
 				return [
 					<NavItem key="signup">
@@ -99,7 +103,7 @@ class Header extends Component {
 	render() {
 		return (
 			<Navbar color="light" light expand="md">
-				<NavbarBrand href="/">reactstrap</NavbarBrand>
+				<NavbarBrand href="/">COMEX</NavbarBrand>
 				<NavbarToggler onClick={this.toggle} />
 				<Collapse isOpen={this.state.isOpen} navbar>
 					<Nav className="ml-auto" navbar>

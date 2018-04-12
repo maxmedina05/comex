@@ -72,6 +72,7 @@ export default class LoginModal extends Component {
 					Iniciar Sessión
 				</NavLink>
 				<Modal
+					// isOpen={!this.props.isAuthenticated || this.state.showModal}
 					isOpen={this.state.showModal}
 					toggle={this.toggle}
 					className={this.props.className}

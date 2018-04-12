@@ -9,7 +9,6 @@ class LoginPage extends Component {
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.login = this.login.bind(this);
 
 		this.state = {
 			email: '',
