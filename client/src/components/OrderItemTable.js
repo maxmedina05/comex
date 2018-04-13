@@ -25,7 +25,7 @@ const OrderItemRow = ({
 		<tr>
 			<td>{qty} x</td>
 			<td>{product.name} </td>
-			<td>{computePrice(item)} DOP</td>
+			<td>DOP {computePrice(item)}</td>
 			{!hideActions && (
 				<td>
 					<button

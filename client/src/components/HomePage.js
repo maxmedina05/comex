@@ -21,16 +21,16 @@ class HomePage extends Component {
 		}
 		const items = this.props.menu.items;
 		return (
-			<div className="container-fluid">
+			<div className="container-fluid HomePage">
 				<div className="row">
-					<div className="col-md-8">
-						<h1>Menu de Hoy</h1>
+					<div className="col-md-9">
+						<h1 className="today-menu-title">Menu de Hoy</h1>
 						<MenuGrid
 							onAddOrderItemToCart={this.props.handleAddOrderItemToCart}
 							items={items}
 						/>
 					</div>
-					<div className="col-md-4">
+					<div className="col-md-3">
 						<Checkout />
 					</div>
 				</div>

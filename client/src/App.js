@@ -62,7 +62,7 @@ class App extends Component {
 								path="/orders/:objectId/confirmation"
 								component={OrderConfirmationPage}
 							/>
-							<PrivateRoute
+							<Route
 								exact
 								path="/admin/orders"
 								canActivate={this.canUserAccessPage}

@@ -1,8 +1,8 @@
-import 'bootswatch/dist/flatly/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'react-datetime/css/react-datetime.css';
 import 'react-select/dist/react-select.css';
-import './App.scss';
+import './App.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

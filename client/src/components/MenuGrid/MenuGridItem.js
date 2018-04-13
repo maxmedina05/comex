@@ -1,33 +1,33 @@
 import React from 'react';
-import { FormattedNumber } from 'react-intl';
+
+function toDecimal(number) {
+	return (Math.round(number * 100) / 100).toFixed(2);
+}
 
 const MenuGridItem = ({ item, onAddOrderItemToCart }) => {
 	const product = item.product;
 
 	return (
-		<div className="col-lg-2 col-md-3 mb-4">
-			<div className="card h-100">
+		<div className="col-md-4 mb-4">
+			<div className="MenuGridItem">
 				<img
-					className="card-img-top"
 					src={
 						product.imageUrl
 							? product.imageUrl
 							: 'http://lorempizza.com/380/240'
 					}
-					alt=""
+					alt={product.name}
 				/>
-				<div className="card-body">
-					<span className="badge badge-warning float-right">
-						<FormattedNumber value={product.price} minimumFractionDigits={2} />
-					</span>
-					<span className="card-title">
-						<h6>{product.name} </h6>
-					</span>
-				</div>
-				<div className="card-footer">
-					<button type="button" onClick={() => onAddOrderItemToCart(item)}>
-						Agregar
-					</button>
+				<div className="MenuGridItemContent">
+					<h6>{product.name}</h6>
+					<div>
+						<span>
+							<span className="badge badge-warning">
+								DOP {toDecimal(product.price)}
+							</span>
+						</span>
+						<button className="btn btn-danger">Agregar</button>
+					</div>
 				</div>
 			</div>
 		</div>

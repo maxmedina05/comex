@@ -58,7 +58,7 @@ class Checkout extends Component {
 					<h2>Caja</h2>
 					<h5>Quiero Ordernar:</h5>
 
-					<OrderItemTable
+					{/* <OrderItemTable
 						items={this.props.orderItems}
 						handleRemoveOrderItemFromCart={
 							this.props.handleRemoveOrderItemFromCart
@@ -69,7 +69,7 @@ class Checkout extends Component {
 						handleDecrementOrderItemCount={
 							this.props.handleDecrementOrderItemCount
 						}
-					/>
+					/> */}
 
 					<div className="form-group">
 						<label htmlFor="message">Mensaje para el provedor</label>
