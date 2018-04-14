@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export const WizardFormStep = props => {
-	if (props.currentStep === props.step) {
+	if (props.currentStep == props.step) {
 		return props.children;
 	}
 	return null;
@@ -19,7 +19,7 @@ class WizardForm extends Component {
 
 		this.state = {
 			steps: [],
-			currentStep: 2
+			currentStep: 1
 		};
 
 		this._handleNext = this._handleNext.bind(this);
@@ -48,7 +48,7 @@ class WizardForm extends Component {
 
 	_handleNext() {
 		const currentStep = this.state.currentStep;
-		if (currentStep === this.props.stepCount) {
+		if (currentStep == this.props.stepCount) {
 			return;
 		}
 		this.setState({
@@ -58,7 +58,7 @@ class WizardForm extends Component {
 
 	_handleBack() {
 		const currentStep = this.state.currentStep;
-		if (currentStep === 1) {
+		if (currentStep == 1) {
 			return;
 		}
 
