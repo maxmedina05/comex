@@ -6,47 +6,6 @@ const makeResponseBody = require('../response-body');
 
 const User = require('./user.schema');
 
-async function signup(req, res) {
-	const { email, password, firstName, lastName } = req.body;
-
-	try {
-		const existingUser = await User.findOne({ email });
-		if (existingUser) {
-			throw Error('Email already being used!');
-		}
-
-		const user = new User({
-			email,
-			userInfo: {
-				firstName,
-				lastName
-			},
-			role: 'Customer'
-		});
-		const hashPassword = await user.generateHash(password);
-		user.password = hashPassword;
-		await user.save();
-
-		req.login(user, err => {
-			if (err) {
-				throw Error(err.message || err);
-			}
-			res.json(
-				makeResponseBody(
-					'success',
-					{ ...user, name: user.getName() },
-					'User created successfully!',
-					1
-				)
-			);
-		});
-	} catch (err) {
-		res
-			// .status(422)
-			.json(makeResponseBody('error', null, err.message || err, 0));
-	}
-}
-
 async function getOne(req, res) {
 	const objectId = req.params.objectId;
 	try {
@@ -74,7 +33,7 @@ async function updateOne(req, res) {
 
 		user.userInfo.firstName = firstName;
 		user.userInfo.lastName = lastName;
-		user.userInfo.companyInfo = companyInfo;
+		user.userInfo.company = companyInfo;
 		user.userInfo.address = address;
 		user.userInfo.phone = phone;
 		await user.save();
@@ -90,7 +49,6 @@ async function updateOne(req, res) {
 	}
 }
 
-router.post('/signup', signup);
 router.get('/:objectId', getOne);
 router.put('/:objectId', updateOne);
 

@@ -4,6 +4,55 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const { ObjectId } = mongoose.Types;
 const makeResponseBody = require('./resources/response-body');
+const User = require('./resources/user/user.schema');
+const { UserInfoSchema } = require('./resources/user/user-info.schema');
+
+router.post('/signup', async (req, res) => {
+	const { email, password, firstName, lastName } = req.body;
+
+	try {
+		const existingUser = await User.findOne({ email });
+		if (existingUser) {
+			throw Error('Email already being used!');
+		}
+
+		const user = new User({
+			email,
+			userInfo: UserInfoSchema,
+			role: 'Customer'
+		});
+
+		user.userInfo.firstName = firstName;
+		user.userInfo.lastName = lastName;
+		const hashPassword = await user.generateHash(password);
+		user.password = hashPassword;
+		await user.save();
+
+		req.login(user, err => {
+			if (err) {
+				throw Error(err.message || err);
+			}
+			res.json(
+				makeResponseBody(
+					'success',
+					{
+						objectId: user._id,
+						email,
+						role: user.role,
+						userInfo: user.userInfo,
+						fullName: user.getFullName()
+					},
+					'User created successfully!',
+					1
+				)
+			);
+		});
+	} catch (err) {
+		res
+			// .status(422)
+			.json(makeResponseBody('error', null, err.message || err, 0));
+	}
+});
 
 router.post('/login', (req, res, next) => {
 	passport.authenticate('local', (err, user, info) => {
@@ -40,11 +89,17 @@ router.get('/user', (req, res) => {
 	if (!req.user) {
 		res.json(makeResponseBody('error', null, 'User is not authenticated!', 0));
 	} else {
-		const { email, role, _id } = req.user;
+		const { email, role, _id, userInfo } = req.user;
 		res.json(
 			makeResponseBody(
 				'success',
-				{ objectId: _id, email, role, name: req.user.getName() },
+				{
+					objectId: _id,
+					email,
+					role,
+					userInfo,
+					fullName: req.user.getName()
+				},
 				'User is authenticated!',
 				1
 			)

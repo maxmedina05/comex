@@ -16,10 +16,10 @@ export default class UserProfilePage extends Component {
 			lastName: '',
 			companyName: '',
 			department: '',
-			address: '',
+			street: '',
+			city: '',
 			state: '',
 			reference: '',
-			city: '',
 			phone: ''
 		};
 	}
@@ -50,9 +50,13 @@ export default class UserProfilePage extends Component {
 					email: body.data.email,
 					firstName: body.data.userInfo ? body.data.userInfo.firstName : '',
 					lastName: body.data.userInfo ? body.data.userInfo.lastName : '',
-					companyName: body.data.userInfo ? body.data.userInfo.companyName : '',
-					department: body.data.userInfo ? body.data.userInfo.department : '',
-					address: body.data.userInfo ? body.data.userInfo.address.address : '',
+					companyName: body.data.userInfo
+						? body.data.userInfo.company.companyName
+						: '',
+					department: body.data.userInfo
+						? body.data.userInfo.company.department
+						: '',
+					street: body.data.userInfo ? body.data.userInfo.address.street : '',
 					state: body.data.userInfo ? body.data.userInfo.address.state : '',
 					reference: body.data.userInfo
 						? body.data.userInfo.address.reference
@@ -68,11 +72,6 @@ export default class UserProfilePage extends Component {
 		}
 	}
 
-	async handleSubmit(event) {
-		event.preventDefault();
-		this.updateUserProfile();
-	}
-
 	async updateUserProfile() {
 		try {
 			const response = await axios.put(`/api/v1/users/${this.state.objectId}`, {
@@ -83,7 +82,8 @@ export default class UserProfilePage extends Component {
 					department: this.state.department
 				},
 				address: {
-					address: this.state.address,
+					street: this.state.address,
+					city: this.state.city,
 					state: this.state.state,
 					reference: this.state.reference
 				},
@@ -93,16 +93,20 @@ export default class UserProfilePage extends Component {
 			if (response.data.status === 'error') {
 				throw Error(response.data.message);
 			}
-			// this.props.history.goBack();
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
+	async handleSubmit(event) {
+		event.preventDefault();
+		this.updateUserProfile();
+	}
+
 	render() {
 		return (
 			<div className="container">
-				<h1>Perfil de Usuario</h1>
+				<h1>Mi Perfil</h1>
 				<form onSubmit={this.handleSubmit}>
 					<div className="form-group">
 						<label htmlFor="email">Email</label>
@@ -158,12 +162,23 @@ export default class UserProfilePage extends Component {
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="address">Dirección</label>
+						<label htmlFor="address">Calle</label>
 						<input
 							className="form-control"
 							id="address"
 							name="address"
-							value={this.state.address}
+							value={this.state.street}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="city">Sector</label>
+						<input
+							className="form-control"
+							id="city"
+							name="city"
+							value={this.state.city}
 							onChange={this.handleInputChange}
 						/>
 					</div>

@@ -55,7 +55,7 @@ const submitRegisterRequest = () => ({
 export const submitRegister = registrationForm => async dispatch => {
 	dispatch(submitRegisterRequest());
 	try {
-		const response = await axios.post(`${BASE_API_URL}/users/signup`, {
+		const response = await axios.post(`${BASE_API_URL}/auth/signup`, {
 			...registrationForm
 		});
 		const body = response.data;

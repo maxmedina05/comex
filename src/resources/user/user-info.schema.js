@@ -7,7 +7,7 @@ const CompanySchema = new Schema({
 });
 
 const AddressSchema = new Schema({
-	address: { type: String, default: '' },
+	street: { type: String, default: '' },
 	city: { type: String, default: '' },
 	state: { type: String, default: '' },
 	reference: { type: String, default: '' }
@@ -16,8 +16,8 @@ const AddressSchema = new Schema({
 const PersonSchema = new Schema({
 	firstName: { type: String, default: '' },
 	lastName: { type: String, default: '' },
-	company: CompanySchema,
-	address: AddressSchema,
+	company: { type: CompanySchema, default: CompanySchema },
+	address: { type: AddressSchema, default: AddressSchema },
 	phone: { type: String, default: '' }
 });
 

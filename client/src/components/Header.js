@@ -77,7 +77,7 @@ class Header extends Component {
 				return (
 					<UncontrolledDropdown nav inNavbar>
 						<DropdownToggle nav caret>
-							{`Hola ${authentication.payload.name}`}
+							{`Hola ${authentication.payload.fullName}`}
 						</DropdownToggle>
 						<DropdownMenu right>
 							<DropdownItem>
@@ -87,6 +87,13 @@ class Header extends Component {
 										to={`/users/${authentication.payload.objectId}/profile`}
 									>
 										Mi Perfil
+									</NavLink>
+								</NavItem>
+							</DropdownItem>
+							<DropdownItem>
+								<NavItem key="orders">
+									<NavLink tag={Link} to={`/orders`}>
+										Mis Pedidos
 									</NavLink>
 								</NavItem>
 							</DropdownItem>

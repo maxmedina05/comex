@@ -26,7 +26,12 @@ const MenuGridItem = ({ item, onAddOrderItemToCart }) => {
 								DOP {toDecimal(product.price)}
 							</span>
 						</span>
-						<button className="btn btn-danger">Agregar</button>
+						<button
+							onClick={() => onAddOrderItemToCart(item)}
+							className="btn btn-danger"
+						>
+							Agregar
+						</button>
 					</div>
 				</div>
 			</div>

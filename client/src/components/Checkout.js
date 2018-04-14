@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { OrderItemTable } from './OrderItemTable';
+import WizardForm, { WizardFormStep } from './WizardForm';
+
 import {
 	removeOrderItemFromCart,
 	incrementOrderItemCount,
@@ -17,7 +19,13 @@ class Checkout extends Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 
 		this.state = {
-			message: ''
+			message: '',
+			street: this.props.address ? this.props.address.street : '',
+			city: this.props.address ? this.props.address.city : '',
+			state: this.props.address ? this.props.address.state : '',
+			reference: this.props.address
+				? this.props.user.userInfo.address.reference
+				: ''
 		};
 	}
 
@@ -53,12 +61,11 @@ class Checkout extends Component {
 		}
 
 		return (
-			<div>
-				<form>
-					<h2>Caja</h2>
+			<WizardForm stepCount={2}>
+				<h2>Caja</h2>
+				<WizardFormStep step={1}>
 					<h5>Quiero Ordernar:</h5>
-
-					{/* <OrderItemTable
+					<OrderItemTable
 						items={this.props.orderItems}
 						handleRemoveOrderItemFromCart={
 							this.props.handleRemoveOrderItemFromCart
@@ -69,7 +76,60 @@ class Checkout extends Component {
 						handleDecrementOrderItemCount={
 							this.props.handleDecrementOrderItemCount
 						}
-					/> */}
+					/>
+				</WizardFormStep>
+
+				<WizardFormStep step={2}>
+					<h5>Datos de envio:</h5>
+					<div className="form-group">
+						<label htmlFor="customerName">Nombre</label>
+						<input
+							readOnly
+							className="form-control"
+							name="customerName"
+							value={this.props.user.customerName}
+						/>
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="address">Calle</label>
+						<input
+							className="form-control"
+							name="address"
+							value={this.state.address}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="city">Sector</label>
+						<input
+							className="form-control"
+							name="city"
+							value={this.state.city}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="state">Provincia</label>
+						<input
+							className="form-control"
+							name="state"
+							value={this.state.state}
+							onChange={this.handleInputChange}
+						/>
+					</div>
+
+					<div className="form-group">
+						<label htmlFor="reference">Referencia</label>
+						<input
+							className="form-control"
+							name="reference"
+							value={this.state.reference}
+							onChange={this.handleInputChange}
+						/>
+					</div>
 
 					<div className="form-group">
 						<label htmlFor="message">Mensaje para el provedor</label>
@@ -82,25 +142,28 @@ class Checkout extends Component {
 							onChange={this.handleInputChange}
 						/>
 					</div>
-					<button type="reset" className="btn btn-danger">
-						Cancelar
-					</button>
-					<button
-						type="submit"
-						className="btn btn-primary"
-						onClick={this.handleSubmitOrder}
-					>
-						Siguiente
-					</button>
-				</form>
-			</div>
+				</WizardFormStep>
+			</WizardForm>
 		);
 	}
 }
 
 function mapStateToProps(state) {
 	const { isSubmitting, hasErrors, order } = state.checkout;
+	const { fullName, userInfo } = state.authentication.payload;
+
+	let user = {
+		email: '',
+		customerName: fullName ? fullName : '',
+		address: {
+			street: userInfo ? userInfo.address.street : '',
+			city: userInfo ? userInfo.address.city : '',
+			state: userInfo ? userInfo.address.state : '',
+			reference: userInfo ? userInfo.address.reference : ''
+		}
+	};
 	return {
+		user,
 		order,
 		orderItems: state.orderItems,
 		isSubmitting,
