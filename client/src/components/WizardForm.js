@@ -83,7 +83,7 @@ class WizardForm extends Component {
 
 		return (
 			<form onSubmit={this._handleSubmit}>
-				{/* {`Current Step: ${this.state.currentStep}`} */}
+				{`Current Step: ${this.state.currentStep}`}
 				{otherChildren}
 				{steps}
 				<div>

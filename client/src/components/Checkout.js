@@ -62,7 +62,7 @@ class Checkout extends Component {
 
 		return (
 			<WizardForm stepCount={2}>
-				<h2>Caja</h2>
+				<h2>Caja Funcionando</h2>
 				<WizardFormStep step={1}>
 					<h5>Quiero Ordernar:</h5>
 					<OrderItemTable
