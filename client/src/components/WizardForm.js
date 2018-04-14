@@ -32,10 +32,10 @@ class WizardForm extends Component {
 	_getSteps() {
 		const { children } = this.props;
 		if (Array.isArray(children)) {
-			return children.filter(x => x.type.name === 'WizardFormStep');
+			return children.filter(x => x.props.step);
 		}
 
-		if (children && children.type.name === 'WizardFormStep') {
+		if (children && children.props.step) {
 			return [children];
 		}
 
@@ -77,9 +77,12 @@ class WizardForm extends Component {
 				  )
 				: [];
 
-		const otherChildren = Array.isArray(children)
-			? this.props.children.filter(x => x.type.name !== 'WizardFormStep')
-			: [children];
+		let otherChildren = [];
+		if (Array.isArray(children)) {
+			otherChildren = this.props.children.filter(x => !x.props.step);
+		} else if (!children.props.step) {
+			otherChildren = [children];
+		}
 
 		return (
 			<form onSubmit={this._handleSubmit}>

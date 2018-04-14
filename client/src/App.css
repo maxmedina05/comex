@@ -17,6 +17,7 @@
 }
 
 .navbar-dark .navbar-nav .nav-link {
+	background-color: #ba1f33 !important;
 	color: #fff05c !important;
 	/* font-weight: bold; */
 }
