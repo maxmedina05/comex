@@ -12,11 +12,13 @@ export default function(
 	},
 	action
 ) {
-	// console.log('action: ', action);
-	// console.log('state: ', state);
 	switch (action.type) {
 		case SUBMIT_ORDER_REQUEST:
-			return Object.assign({}, state, { isSubmitting: true, hasErrors: false });
+			return Object.assign({}, state, {
+				order: null,
+				isSubmitting: true,
+				hasErrors: false
+			});
 		case SUBMIT_ORDER_SUCCESS:
 			return Object.assign({}, state, {
 				isSubmitting: false,
@@ -25,7 +27,11 @@ export default function(
 				createdAt: action.createdAt
 			});
 		case SUBMIT_ORDER_FAILURE:
-			return Object.assign({}, state, { isSubmitting: false, hasErrors: true });
+			return Object.assign({}, state, {
+				order: null,
+				isSubmitting: false,
+				hasErrors: true
+			});
 		default:
 			return state;
 	}

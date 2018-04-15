@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ResourceTable from '../../dynamic-components/resource-table';
+import ResourceTable from '../../reusable-components/resource-table';
 import axios from 'axios';
 
 export default class MenuListPage extends Component {

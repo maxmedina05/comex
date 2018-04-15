@@ -11,23 +11,27 @@ class OrderConfirmationPage extends Component {
 		this.handleGoBackClick = this.handleGoBackClick.bind(this);
 
 		this.state = {
-			redirectToReferer: false
+			redirectToReferrer: false
 		};
+	}
+
+	componentDidMount() {
+		window.scrollTo(0, 0);
 	}
 
 	handleGoBackClick() {
 		this.setState({
-			redirectToReferer: true
+			redirectToReferrer: true
 		});
 	}
 
 	render() {
+		const { from } = this.props.location.state || { from: { pathname: '/' } };
 		let order = this.props.order;
-		// const { from } = this.props.location.state || { from: { pathname: '/' } };
-		const { redirectToReferrer } = this.props;
+		const { redirectToReferrer } = this.state;
 
 		if (order === null || redirectToReferrer === true) {
-			return <Redirect to="/" />;
+			return <Redirect to={from} />;
 		}
 
 		order.createdAt = moment(new Date(order.createdAt)).format(
@@ -66,16 +70,30 @@ class OrderConfirmationPage extends Component {
 					</div>
 				</div>
 				<div className="form-group row">
-					<label className="col-sm-2 col-form-label" htmlFor="address">
-						Dirección
+					<label className="col-sm-2 col-form-label" htmlFor="street">
+						Calle
 					</label>
 					<div className="col-sm-10">
 						<input
 							className="form-control-plaintext"
-							name="address"
-							type="address"
+							name="street"
+							type="street"
 							readOnly
-							value={order.shippingAddress.address}
+							value={order.shippingAddress.street}
+						/>
+					</div>
+				</div>
+				<div className="form-group row">
+					<label className="col-sm-2 col-form-label" htmlFor="city">
+						Sector
+					</label>
+					<div className="col-sm-10">
+						<input
+							className="form-control-plaintext"
+							name="city"
+							type="city"
+							readOnly
+							value={order.shippingAddress.city}
 						/>
 					</div>
 				</div>
@@ -110,7 +128,9 @@ class OrderConfirmationPage extends Component {
 				<h5>Productos</h5>
 				<OrderItemTable items={order.items} hideActions={true} />
 
-				<button className="btn btn-info">Regresar</button>
+				<button className="btn btn-info" onClick={this.handleGoBackClick}>
+					Regresar
+				</button>
 			</div>
 		);
 	}

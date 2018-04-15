@@ -12,6 +12,10 @@ function computePrice(item) {
 	return Math.abs(item.unitPrice - item.discount) * item.qty;
 }
 
+function trimLongText(text) {
+	return text.length > 15 ? text.slice(0, 15) + '...' : text;
+}
+
 const OrderItemRow = ({
 	item,
 	hideActions,
@@ -23,8 +27,8 @@ const OrderItemRow = ({
 
 	return (
 		<tr>
-			<td>{qty} x</td>
-			<td>{product.name} </td>
+			<td>{qty}x</td>
+			<td>{hideActions ? product.name : trimLongText(product.name)} </td>
 			<td>DOP {computePrice(item)}</td>
 			{!hideActions && (
 				<td>
@@ -63,7 +67,7 @@ export const OrderItemTable = ({
 	hideActions = false
 }) => {
 	return (
-		<table className="table">
+		<table className="table table-hover table-sm">
 			<tbody>
 				{items.map(item => (
 					<OrderItemRow
@@ -80,7 +84,8 @@ export const OrderItemTable = ({
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td>{computeTotalPrice(items)}</td>
+					<td colSpan="1" />
+					<td>DOP {computeTotalPrice(items)}</td>
 				</tr>
 			</tbody>
 		</table>

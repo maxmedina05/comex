@@ -45,24 +45,20 @@ export default class UserProfilePage extends Component {
 			const response = await axios.get(`/api/v1/users/${objectId}`);
 			const body = response.data;
 			if (body.status === 'success') {
+				const { userInfo } = body.data;
+
 				this.setState({
 					objectId: body.data._id,
 					email: body.data.email,
-					firstName: body.data.userInfo ? body.data.userInfo.firstName : '',
-					lastName: body.data.userInfo ? body.data.userInfo.lastName : '',
-					companyName: body.data.userInfo
-						? body.data.userInfo.company.companyName
-						: '',
-					department: body.data.userInfo
-						? body.data.userInfo.company.department
-						: '',
-					street: body.data.userInfo ? body.data.userInfo.address.street : '',
-					state: body.data.userInfo ? body.data.userInfo.address.state : '',
-					reference: body.data.userInfo
-						? body.data.userInfo.address.reference
-						: '',
-					city: body.data.userInfo ? body.data.userInfo.address.city : '',
-					phone: body.data.userInfo ? body.data.userInfo.phone : ''
+					firstName: userInfo ? userInfo.firstName : '',
+					lastName: userInfo ? userInfo.lastName : '',
+					companyName: userInfo ? userInfo.company.companyName : '',
+					department: userInfo ? userInfo.company.department : '',
+					street: userInfo ? userInfo.address.street : '',
+					state: userInfo ? userInfo.address.state : '',
+					reference: userInfo ? userInfo.address.reference : '',
+					city: userInfo ? userInfo.address.city : '',
+					phone: userInfo ? userInfo.phone : ''
 				});
 			} else {
 				throw Error(body.message);
@@ -82,7 +78,7 @@ export default class UserProfilePage extends Component {
 					department: this.state.department
 				},
 				address: {
-					street: this.state.address,
+					street: this.state.street,
 					city: this.state.city,
 					state: this.state.state,
 					reference: this.state.reference
@@ -162,11 +158,11 @@ export default class UserProfilePage extends Component {
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="address">Calle</label>
+						<label htmlFor="street">Calle</label>
 						<input
 							className="form-control"
-							id="address"
-							name="address"
+							id="street"
+							name="street"
 							value={this.state.street}
 							onChange={this.handleInputChange}
 						/>

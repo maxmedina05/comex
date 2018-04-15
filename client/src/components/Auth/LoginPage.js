@@ -37,9 +37,7 @@ class LoginPage extends Component {
 		const { redirectToReferrer } = this.props;
 
 		if (redirectToReferrer) {
-			if (redirectToReferrer) {
-				return <Redirect to={from} />;
-			}
+			return <Redirect to={from} />;
 		}
 
 		return (

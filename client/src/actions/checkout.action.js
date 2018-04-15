@@ -39,10 +39,9 @@ export const decrementOrderItemCount = orderItem => ({
 	qty: orderItem.qty - 1
 });
 
-const submitOrderRequest = (items, message) => ({
+const submitOrderRequest = preOrder => ({
 	type: SUBMIT_ORDER_REQUEST,
-	items: items,
-	message: message
+	preOrder
 });
 
 const clearCart = () => ({
@@ -58,22 +57,20 @@ const submitOrderFailure = message => ({
 	message
 });
 
-export const submitOrder = (
-	items,
-	shippingAddress,
-	message
-) => async dispatch => {
-	dispatch(submitOrderRequest(items, shippingAddress, message));
+export const submitOrder = (preOrder, history) => async dispatch => {
+	dispatch(submitOrderRequest(preOrder));
+
 	const response = await axios.post(`${BASE_API_URL}/orders`, {
-		items,
-		message,
-		shippingAddress,
+		items: preOrder.items,
+		message: preOrder.message,
+		shippingAddress: preOrder.address,
 		createdAt: new Date()
 	});
 	const body = response.data;
 	if (body.status === 'success') {
 		dispatch(clearCart());
 		dispatch(submitOrderSuccess(body.data));
+		history.push(`/orders/${body.data._id}/confirmation`);
 	} else {
 		dispatch(submitOrderFailure(body.message));
 	}

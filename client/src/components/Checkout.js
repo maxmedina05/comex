@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { OrderItemTable } from './OrderItemTable';
 import WizardForm, { WizardFormStep } from './WizardForm';
 
@@ -18,14 +18,14 @@ class Checkout extends Component {
 		this.handleSubmitOrder = this.handleSubmitOrder.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 
+		const { user } = this.props;
+
 		this.state = {
 			message: '',
-			street: this.props.address ? this.props.address.street : '',
-			city: this.props.address ? this.props.address.city : '',
-			state: this.props.address ? this.props.address.state : '',
-			reference: this.props.address
-				? this.props.user.userInfo.address.reference
-				: ''
+			street: user ? user.address.street : '',
+			city: user ? user.address.city : '',
+			state: user ? user.address.state : '',
+			reference: user ? user.address.reference : ''
 		};
 	}
 
@@ -39,30 +39,35 @@ class Checkout extends Component {
 		});
 	}
 
-	handleSubmitOrder(event) {
-		event.preventDefault();
+	handleSubmitOrder() {
+		console.log('handleSubmitOrder');
 		if (this.props.orderItems && this.props.orderItems.length >= 0) {
-			this.props.submitOrder(this.props.orderItems);
+			const { street, city, state, reference, message } = this.state;
+			const address = {
+				street,
+				city,
+				state,
+				reference
+			};
+			this.props.submitOrder(
+				{
+					items: this.props.orderItems,
+					address,
+					message
+				},
+				this.props.history
+			);
 		}
 	}
 
 	render() {
-		const redirectToOrderConfirmation = this.props.order !== null;
-
-		if (redirectToOrderConfirmation) {
-			return (
-				<Redirect
-					to={{
-						pathname: `/orders/${this.props.order._id}/confirmation`,
-						state: { from: this.props.location }
-					}}
-				/>
-			);
-		}
-
 		return (
-			<WizardForm stepCount={2}>
-				<h2>Caja Funcionando</h2>
+			<WizardForm
+				stepCount={3}
+				lastAction="Pedir"
+				handleSubmit={this.handleSubmitOrder}
+			>
+				<h2>Caja</h2>
 				<WizardFormStep step={1}>
 					<h5>Quiero Ordernar:</h5>
 					<OrderItemTable
@@ -96,7 +101,7 @@ class Checkout extends Component {
 						<input
 							className="form-control"
 							name="address"
-							value={this.state.address}
+							value={this.state.street}
 							onChange={this.handleInputChange}
 						/>
 					</div>
@@ -136,11 +141,100 @@ class Checkout extends Component {
 						<textarea
 							className="form-control"
 							name="message"
-							id="message"
 							row="3"
 							value={this.state.message}
 							onChange={this.handleInputChange}
 						/>
+					</div>
+				</WizardFormStep>
+
+				<WizardFormStep step={3}>
+					<h5>Confirmación de Pedido</h5>
+					<div className="form-group row">
+						<label className="col-sm-2 col-form-label" htmlFor="customerName">
+							Nombre:
+						</label>
+						<div className="col-sm-10">
+							<input
+								readOnly
+								className="form-control-plaintext"
+								name="customerName"
+								value={this.props.user.customerName}
+							/>
+						</div>
+					</div>
+					<div className="form-group row">
+						<label className="col-sm-2 col-form-label" htmlFor="street">
+							Calle:
+						</label>
+						<div className="col-sm-10">
+							<input
+								readOnly
+								className="form-control-plaintext"
+								name="street"
+								value={this.state.street}
+							/>
+						</div>
+					</div>
+					<div className="form-group row">
+						<label className="col-sm-2 col-form-label" htmlFor="city">
+							Sector:
+						</label>
+						<div className="col-sm-10">
+							<input
+								readOnly
+								className="form-control-plaintext"
+								name="city"
+								value={this.state.city}
+							/>
+						</div>
+					</div>
+
+					<div className="form-group row">
+						<label className="col-sm-2 col-form-label" htmlFor="state">
+							Provincia:
+						</label>
+						<div className="col-sm-10">
+							<input
+								readOnly
+								className="form-control-plaintext"
+								name="state"
+								value={this.state.state}
+							/>
+						</div>
+					</div>
+
+					<div className="form-group row">
+						<label className="col-sm-3 col-form-label" htmlFor="reference">
+							Referencia:
+						</label>
+						<div className="col-sm-9">
+							<input
+								readOnly
+								className="form-control-plaintext"
+								name="reference"
+								value={this.state.reference}
+							/>
+						</div>
+					</div>
+
+					<div className="form-group row">
+						<label className="col-sm-2 col-form-label" htmlFor="message">
+							Mensaje:
+						</label>
+						<div className="col-sm-10">
+							<textarea
+								className="form-control-plaintext"
+								readOnly
+								name="message"
+								row="3"
+								value={this.state.message}
+							/>
+						</div>
+					</div>
+
+					<div>
+						<OrderItemTable items={this.props.orderItems} hideActions={true} />
 					</div>
 				</WizardFormStep>
 			</WizardForm>
@@ -151,7 +245,6 @@ class Checkout extends Component {
 function mapStateToProps(state) {
 	const { isSubmitting, hasErrors, order } = state.checkout;
 	const { fullName, userInfo } = state.authentication.payload;
-
 	let user = {
 		email: '',
 		customerName: fullName ? fullName : '',
@@ -179,9 +272,10 @@ function mapDispatchToProps(dispatch) {
 			dispatch(incrementOrderItemCount(orderItem)),
 		handleDecrementOrderItemCount: orderItem =>
 			dispatch(decrementOrderItemCount(orderItem)),
-		submitOrder: (items, shippingAddress, message) =>
-			dispatch(submitOrder(items, shippingAddress, message))
+		submitOrder: (preOrder, history) => dispatch(submitOrder(preOrder, history))
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default connect(mapStateToProps, mapDispatchToProps)(
+	withRouter(Checkout)
+);

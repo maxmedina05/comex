@@ -45,7 +45,7 @@ async function getOne(req, res) {
 }
 
 async function addOne(req, res) {
-	const { items, createdAt, message } = req.body;
+	const { items, shippingAddress, createdAt, message } = req.body;
 
 	const date = new Date(createdAt);
 	const offset = date.getTimezoneOffset();
@@ -55,23 +55,20 @@ async function addOne(req, res) {
 		createdAt,
 		offset,
 		message,
+		shippingAddress,
 		user: req.user._id,
 		modifiedAt: createdAt,
 		status: 'Aun no procesada'
 	});
 	try {
-		// await order.save();
+		await order.save();
 
 		let createdOrder = {
+			_id: order._id,
 			totalPrice: order.computeTotalPrice(),
 			items,
 			createdAt,
-			shippingAddress: {
-				address: 'Calle Enriquillo, #107',
-				city: 'Santo Domingo',
-				state: 'Santo Domingo',
-				reference: 'Frente al colmado Don Ramon'
-			},
+			shippingAddress,
 			customerName: req.user.getFullName(),
 			message
 		};

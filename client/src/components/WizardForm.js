@@ -13,6 +13,12 @@ WizardFormStep.propsTypes = {
 	currentStep: PropTypes.number.isRequired
 };
 
+const wizardFormStyle = {
+	display: 'flex',
+	justifyContent: 'flex-end',
+	padding: '0 8px'
+};
+
 class WizardForm extends Component {
 	constructor(props) {
 		super(props);
@@ -49,6 +55,7 @@ class WizardForm extends Component {
 	_handleNext() {
 		const currentStep = this.state.currentStep;
 		if (currentStep == this.props.stepCount) {
+			this.props.handleSubmit();
 			return;
 		}
 		this.setState({
@@ -86,15 +93,26 @@ class WizardForm extends Component {
 
 		return (
 			<form onSubmit={this._handleSubmit}>
-				{`Current Step: ${this.state.currentStep}`}
+				{/* {`Current Step: ${this.state.currentStep}`} */}
 				{otherChildren}
 				{steps}
-				<div>
-					<button className="btn btn-warning" onClick={this._handleBack}>
-						Back
+				<div style={wizardFormStyle}>
+					<button
+						style={{ marginRight: '16px' }}
+						type="button"
+						className="btn btn-warning"
+						onClick={this._handleBack}
+					>
+						Atras
 					</button>
-					<button className="btn btn-info" onClick={this._handleNext}>
-						Next
+					<button
+						type="button"
+						className="btn btn-info"
+						onClick={this._handleNext}
+					>
+						{this.state.currentStep === this.props.stepCount
+							? this.props.lastAction
+							: 'Siguiente'}
 					</button>
 				</div>
 			</form>

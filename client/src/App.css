@@ -12,14 +12,12 @@
 	background-color: #ba1f33 !important;
 }
 
-.navbar {
-	height: 64px;
-}
+/* .navbar {
+	min-height: 64px;
+} */
 
 .navbar-dark .navbar-nav .nav-link {
-	background-color: #ba1f33 !important;
 	color: #fff05c !important;
-	/* font-weight: bold; */
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
