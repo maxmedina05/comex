@@ -33,6 +33,12 @@ class WizardForm extends Component {
 		this._handleSubmit = this._handleSubmit.bind(this);
 		// this._handleSubmit = this.props.handleSubmit;
 		this._getSteps = this._getSteps.bind(this);
+		this._scrollToTop = this._scrollToTop.bind(this);
+	}
+
+	_scrollToTop() {
+		const wizardFormTop = document.getElementById('wizardFormTop');
+		wizardFormTop.scrollTop = wizardFormTop.scrollHeight;
 	}
 
 	_getSteps() {
@@ -53,6 +59,7 @@ class WizardForm extends Component {
 	}
 
 	_handleNext() {
+		this._scrollToTop();
 		const currentStep = this.state.currentStep;
 		if (currentStep == this.props.stepCount) {
 			this.props.handleSubmit();
@@ -64,6 +71,7 @@ class WizardForm extends Component {
 	}
 
 	_handleBack() {
+		this._scrollToTop();
 		const currentStep = this.state.currentStep;
 		if (currentStep == 1) {
 			return;
@@ -92,7 +100,11 @@ class WizardForm extends Component {
 		}
 
 		return (
-			<form onSubmit={this._handleSubmit}>
+			<form
+				className={this.props.className}
+				onSubmit={this._handleSubmit}
+				id="wizardFormTop"
+			>
 				{/* {`Current Step: ${this.state.currentStep}`} */}
 				{otherChildren}
 				{steps}

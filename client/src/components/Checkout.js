@@ -63,6 +63,7 @@ class Checkout extends Component {
 	render() {
 		return (
 			<WizardForm
+				className="WizardForm"
 				stepCount={3}
 				lastAction="Pedir"
 				handleSubmit={this.handleSubmitOrder}
@@ -97,10 +98,10 @@ class Checkout extends Component {
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="address">Calle</label>
+						<label htmlFor="street">Calle</label>
 						<input
 							className="form-control"
-							name="address"
+							name="street"
 							value={this.state.street}
 							onChange={this.handleInputChange}
 						/>

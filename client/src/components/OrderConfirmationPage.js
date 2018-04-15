@@ -40,10 +40,10 @@ class OrderConfirmationPage extends Component {
 
 		return (
 			<div className="container">
-				<h1>Order Confirmation</h1>
+				<h1>Detalles de Pedido</h1>
 				<div className="form-group row">
 					<label className="col-sm-2 col-form-label" htmlFor="orderDate">
-						Fecha de Order
+						Fecha de Pedido
 					</label>
 					<div className="col-sm-10">
 						<input

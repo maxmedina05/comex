@@ -28,7 +28,7 @@ const OrderItemRow = ({
 	return (
 		<tr>
 			<td>{qty}x</td>
-			<td>{hideActions ? product.name : trimLongText(product.name)} </td>
+			<td>{product.name} </td>
 			<td>DOP {computePrice(item)}</td>
 			{!hideActions && (
 				<td>
