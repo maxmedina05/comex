@@ -42,36 +42,38 @@ class LoginPage extends Component {
 
 		return (
 			<div className="container">
-				<h1>Iniciar Sessión</h1>
-				<form onSubmit={this.handleSubmit}>
-					<div className="form-group">
-						<label htmlFor="email">Email</label>
-						<input
-							required
-							className="form-control"
-							id="email"
-							name="email"
-							type="email"
-							placeholder="jose.perez@example.com"
-							value={this.state.email}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="password">Contraseña</label>
-						<input
-							className="form-control"
-							id="password"
-							name="password"
-							type="password"
-							value={this.state.password}
-							onChange={this.handleInputChange}
-						/>
-					</div>
+				<div className="paper-card login-form">
+					<form className="d-flex flex-column" onSubmit={this.handleSubmit}>
+						<h2>Iniciar Sessión</h2>
+						<div className="form-group">
+							<label htmlFor="email">Email</label>
+							<input
+								required
+								className="form-control"
+								id="email"
+								name="email"
+								type="email"
+								placeholder="jose.perez@example.com"
+								value={this.state.email}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+						<div className="form-group">
+							<label htmlFor="password">Contraseña</label>
+							<input
+								className="form-control"
+								id="password"
+								name="password"
+								type="password"
+								value={this.state.password}
+								onChange={this.handleInputChange}
+							/>
+						</div>
 
-					<button className="btn btn-warning">Go back</button>
-					<button className="btn btn-primary">Login</button>
-				</form>
+						<div className="error-message">{this.props.error}</div>
+						<button className="btn btn-primary align-self-end">Entrar</button>
+					</form>
+				</div>
 			</div>
 		);
 	}
@@ -88,8 +90,8 @@ function mapStateToProps(state) {
 		payload,
 		redirectToReferrer,
 		isLoading,
-		hasErrors
+		error
 	} = state.authentication;
-	return { payload, redirectToReferrer, isLoading, hasErrors };
+	return { payload, redirectToReferrer, isLoading, error };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

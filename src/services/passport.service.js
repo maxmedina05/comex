@@ -22,12 +22,12 @@ passport.use(
 			const existingUser = await User.findOne({ email });
 
 			if (!existingUser) {
-				return done(null, false, { message: 'No user found!' });
+				return done('No existe ninguna cuenta atada a ese correo.', false);
 			}
 
 			const isPasswordValid = await existingUser.validatePassword(password);
 			if (!isPasswordValid) {
-				return done(null, false, { message: 'Incorrect email or password.' });
+				return done('Correo o contraseña incorrecta.', false);
 			}
 
 			done(null, existingUser);

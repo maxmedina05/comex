@@ -58,70 +58,77 @@ class RegisterPage extends Component {
 
 		return (
 			<div className="container">
-				<h1>Registro</h1>
-				<form onSubmit={this.handleSubmit}>
-					<div className="form-group">
-						<div className="row">
-							<div className="col">
-								<label htmlFor="firstName">Nombre</label>
-								<input
-									required
-									className="form-control"
-									name="firstName"
-									placeholder="Jose"
-									value={this.state.firstName}
-									onChange={this.handleInputChange}
-								/>
-							</div>
-							<div className="col">
-								<label htmlFor="lastName">Apellido</label>
-								<input
-									required
-									className="form-control"
-									name="lastName"
-									placeholder="Perez"
-									value={this.state.lastName}
-									onChange={this.handleInputChange}
-								/>
+				<div className="paper-card register-form">
+					<form
+						className="d-flex flex-column paper-form"
+						onSubmit={this.handleSubmit}
+					>
+						<h2>Registro</h2>
+						<div className="form-group">
+							<div className="row">
+								<div className="col">
+									<label htmlFor="firstName">Nombre</label>
+									<input
+										required
+										className="form-control"
+										name="firstName"
+										placeholder="Jose"
+										value={this.state.firstName}
+										onChange={this.handleInputChange}
+									/>
+								</div>
+								<div className="col">
+									<label htmlFor="lastName">Apellido</label>
+									<input
+										required
+										className="form-control"
+										name="lastName"
+										placeholder="Perez"
+										value={this.state.lastName}
+										onChange={this.handleInputChange}
+									/>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div className="form-group">
-						<label htmlFor="email">Email</label>
-						<input
-							required
-							className="form-control"
-							name="email"
-							type="email"
-							placeholder="jose.perez@example.com"
-							value={this.state.email}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="password">Contraseña</label>
-						<input
-							className="form-control"
-							name="password"
-							type="password"
-							value={this.state.password}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="repeatPassword">Repita la Contraseña</label>
-						<input
-							className="form-control"
-							id="repeatPassword"
-							name="repeatPassword"
-							type="password"
-							value={this.state.repeatPassword}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-
-					<button className="btn btn-primary">Registrar</button>
-				</form>
+						<div className="form-group">
+							<label htmlFor="email">Email</label>
+							<input
+								required
+								className="form-control"
+								name="email"
+								type="email"
+								placeholder="jose.perez@example.com"
+								value={this.state.email}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+						<div className="form-group">
+							<label htmlFor="password">Contraseña</label>
+							<input
+								className="form-control"
+								name="password"
+								type="password"
+								value={this.state.password}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+						<div className="form-group">
+							<label htmlFor="repeatPassword">Repita la Contraseña</label>
+							<input
+								className="form-control"
+								id="repeatPassword"
+								name="repeatPassword"
+								type="password"
+								value={this.state.repeatPassword}
+								onChange={this.handleInputChange}
+							/>
+						</div>
+						<div className="error-message">{this.props.error}</div>
+						<button className="btn btn-primary align-self-end">
+							Registrar
+						</button>
+					</form>
+				</div>
 			</div>
 		);
 	}
@@ -138,9 +145,9 @@ function mapStateToProps(state) {
 		payload,
 		redirectToReferrer,
 		isLoading,
-		hasErrors
+		error
 	} = state.authentication;
-	return { payload, redirectToReferrer, isLoading, hasErrors };
+	return { payload, redirectToReferrer, isLoading, error };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

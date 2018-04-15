@@ -33,18 +33,18 @@ class App extends Component {
 	}
 
 	canUserAccessPage() {
-		const user = this.props.authentication.payload;
-		if (user && user.role === 'Administrator') {
-			return true;
-		}
+		// const user = this.props.authentication.payload;
+		// if (user && user.role === 'Administrator') {
+		// 	return true;
+		// }
 		return false;
 	}
 
 	render() {
-		const isAuthenticating = this.props.authentication.payload !== null;
+		const { isLoading } = this.props;
 
 		return (
-			isAuthenticating && (
+			!isLoading && (
 				<Router>
 					<div>
 						<Header />
@@ -92,7 +92,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ authentication }) {
-	return { authentication };
+	return { user: authentication.payload, isLoading: authentication.isLoading };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

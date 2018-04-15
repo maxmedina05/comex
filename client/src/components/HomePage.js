@@ -47,8 +47,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-	const { menu, isFetching, lastUpdated, hasErrors } = state.todaysMenu;
-	return { menu, isFetching, lastUpdated, hasErrors };
+	const { menu, isFetching } = state.todaysMenu;
+	return { menu, isFetching };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

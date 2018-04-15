@@ -7,13 +7,45 @@ const makeResponseBody = require('./resources/response-body');
 const User = require('./resources/user/user.schema');
 const { UserInfoSchema } = require('./resources/user/user-info.schema');
 
-router.post('/signup', async (req, res) => {
+function login(req, res, next) {
+	passport.authenticate('local', (err, user, info) => {
+		try {
+			if (err) {
+				throw Error(err);
+			}
+
+			if (!user) {
+				throw Error('Error al iniciar sessión');
+			}
+
+			const { _id, email, role, userInfo } = user;
+			res.json({
+				payload: {
+					objectId: _id,
+					email,
+					role,
+					userInfo,
+					fullName: user.getFullName()
+				},
+				error: null
+			});
+		} catch (err) {
+			res.status(401).json({
+				payload: null,
+				error: err.message || err
+			});
+		}
+	})(req, res, next);
+}
+
+async function signup(req, res) {
 	const { email, password, firstName, lastName } = req.body;
 
 	try {
 		const existingUser = await User.findOne({ email });
+
 		if (existingUser) {
-			throw Error('Email already being used!');
+			throw Error('Ya existe una cuenta con ese correo!');
 		}
 
 		const user = new User({
@@ -24,89 +56,58 @@ router.post('/signup', async (req, res) => {
 
 		user.userInfo.firstName = firstName;
 		user.userInfo.lastName = lastName;
+
 		const hashPassword = await user.generateHash(password);
 		user.password = hashPassword;
+
 		await user.save();
+
+		const { _id, role, userInfo } = user;
 
 		req.login(user, err => {
 			if (err) {
-				throw Error(err.message || err);
+				throw Error(err);
 			}
-			res.json(
-				makeResponseBody(
-					'success',
-					{
-						objectId: user._id,
-						email,
-						role: user.role,
-						userInfo: user.userInfo,
-						fullName: user.getFullName()
-					},
-					'User created successfully!',
-					1
-				)
-			);
-		});
-	} catch (err) {
-		res
-			// .status(422)
-			.json(makeResponseBody('error', null, err.message || err, 0));
-	}
-});
-
-router.post('/login', (req, res, next) => {
-	passport.authenticate('local', (err, user, info) => {
-		try {
-			if (err) {
-				throw Error(err.message || err);
-			}
-
-			if (!user) {
-				throw Error('Authentication failed!');
-			}
-
-			req.login(user, loginErr => {
-				if (loginErr) {
-					throw Error(err.message || err);
-				}
-				const { email, role, _id } = user;
-				res.json(
-					makeResponseBody(
-						'success',
-						{ objectId: _id, email, role, name: user.getName() },
-						'Logged in successfully!',
-						1
-					)
-				);
-			});
-		} catch (err) {
-			res.json(makeResponseBody('error', null, err.message || err, 0));
-		}
-	})(req, res, next);
-});
-
-router.get('/user', (req, res) => {
-	if (!req.user) {
-		res.json(makeResponseBody('error', null, 'User is not authenticated!', 0));
-	} else {
-		const { email, role, _id, userInfo } = req.user;
-		res.json(
-			makeResponseBody(
-				'success',
-				{
+			res.json({
+				payload: {
 					objectId: _id,
 					email,
 					role,
 					userInfo,
-					fullName: req.user.getName()
-				},
-				'User is authenticated!',
-				1
-			)
-		);
+					fullName: user.getFullName()
+				}
+			});
+		});
+	} catch (err) {
+		res.status(400).json({
+			payload: null,
+			error: err.message || err
+		});
+	}
+}
+
+router.get('/user', (req, res) => {
+	if (!req.user) {
+		res.status(401).json({
+			payload: null,
+			error: 'Usuario no está autenticado!'
+		});
+	} else {
+		const { email, role, _id, userInfo } = req.user;
+		res.json({
+			payload: {
+				objectId: _id,
+				email,
+				role,
+				userInfo,
+				fullName: req.user.getFullName()
+			}
+		});
 	}
 });
 
+router.post('/signup', signup);
+router.post('/login', login);
 router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect('/');

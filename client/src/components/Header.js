@@ -49,12 +49,9 @@ class Header extends Component {
 		}
 	}
 
-	renderLoginOptions(authentication) {
-		if (authentication.payload == null) {
-			return;
-		}
-		const isAuthenticated = authentication.payload !== false;
-		switch (isAuthenticated) {
+	renderLoginOptions() {
+		const { user } = this.props;
+		switch (user) {
 			case null:
 			case false:
 				return [
@@ -77,15 +74,12 @@ class Header extends Component {
 				return (
 					<UncontrolledDropdown nav inNavbar>
 						<DropdownToggle nav caret>
-							{`Hola ${authentication.payload.fullName}`}
+							{`Hola ${user.userInfo.firstName}`}
 						</DropdownToggle>
 						<DropdownMenu right>
 							<DropdownItem>
 								<NavItem key="profile">
-									<NavLink
-										tag={Link}
-										to={`/users/${authentication.payload.objectId}/profile`}
-									>
+									<NavLink tag={Link} to={`/users/${user.objectId}/profile`}>
 										Mi Perfil
 									</NavLink>
 								</NavItem>
@@ -112,7 +106,7 @@ class Header extends Component {
 
 	render() {
 		return (
-			<Navbar color="dark" dark expand="sm" className="bg-dark">
+			<Navbar color="dark" dark expand="sm" className="bg-dark header">
 				<NavbarBrand href="/">COMEX</NavbarBrand>
 				<NavbarToggler onClick={this.toggle} />
 				<Collapse isOpen={this.state.isOpen} navbar>
@@ -122,7 +116,7 @@ class Header extends Component {
 								Menu de Hoy
 							</NavLink>
 						</NavItem>
-						{this.renderLoginOptions(this.props.authentication)}
+						{this.renderLoginOptions()}
 					</Nav>
 				</Collapse>
 			</Navbar>
@@ -137,7 +131,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ authentication }) {
-	return { authentication };
+	return { user: authentication.payload };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

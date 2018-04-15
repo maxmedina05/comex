@@ -22,13 +22,6 @@ const UserSchema = new Schema({
 	Administrator
 */
 
-UserSchema.methods.getName = function() {
-	if (!this.userInfo) {
-		return 'No Name';
-	}
-	return this.userInfo.firstName;
-};
-
 UserSchema.methods.getFullName = function() {
 	if (!this.userInfo) {
 		return 'No Name';
