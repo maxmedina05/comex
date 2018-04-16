@@ -3,7 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 const { ObjectId } = mongoose.Types;
-const makeResponseBody = require('./resources/response-body');
 const User = require('./resources/user/user.schema');
 const { UserInfoSchema } = require('./resources/user/user-info.schema');
 

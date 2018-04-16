@@ -8,7 +8,7 @@ import {
 	SUBMIT_REGISTER_REQUEST,
 	SUBMIT_REGISTER_FAILURE,
 	SUBMIT_REGISTER_SUCCESS
-} from '../actions/types';
+} from '../constants/types';
 
 export default function(
 	state = {
@@ -21,12 +21,6 @@ export default function(
 ) {
 	console.log(action);
 	switch (action.type) {
-		case FETCH_USER_REQUEST:
-			return {
-				payload: false,
-				isLoading: true,
-				error: null
-			};
 		case SUBMIT_REGISTER_REQUEST:
 		case SUBMIT_LOGIN_REQUEST:
 		case FETCH_USER_REQUEST:

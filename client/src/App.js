@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchUser } from './actions/auth.action';
-
 import PrivateRoute from './components/PrivateRoute';
 
 import Header from './components/Header';
@@ -12,6 +12,7 @@ import NotFoundPage from './components/NotFoundPage';
 import RegisterPage from './components/Auth/RegisterPage';
 import LoginPage from './components/Auth/LoginPage';
 import UserProfilePage from './components/UserProfile/UserProfilePage';
+import MyOrdersPage from './components/MyOrdersPage';
 import OrderConfirmationPage from './components/OrderConfirmationPage';
 
 import OrderListPage from './components/Admin/Orders/OrderListPage';
@@ -48,20 +49,22 @@ class App extends Component {
 				<Router>
 					<div>
 						<Header />
+						<ToastContainer />
 						<Switch>
 							<Route exact path="/" component={HomePage} />
-							<Route exact path="/signup" component={RegisterPage} />
-							<Route exact path="/login" component={LoginPage} />
+							<Route path="/signup" component={RegisterPage} />
+							<Route path="/login" component={LoginPage} />
 							<Route
-								exact
 								path="/users/:objectId/profile"
 								component={UserProfilePage}
 							/>
+							<Route exact path="/orders" component={MyOrdersPage} />
 							<Route
-								exact
 								path="/orders/:objectId/confirmation"
 								component={OrderConfirmationPage}
 							/>
+
+							{/* TODO: needs refactorgin */}
 							<Route
 								exact
 								path="/admin/orders"

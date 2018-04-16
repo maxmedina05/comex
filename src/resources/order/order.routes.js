@@ -3,22 +3,29 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 const makeResponseBody = require('../response-body');
-const Order = mongoose.model('orders');
+const OrderMessages = require('./order.messages');
+const { computeTotalPrice } = require('./order.service');
+const Order = mongoose.model('Order');
 
 async function getAll(req, res) {
-	try {
-		const resources = await Order.find().populate('items.product');
+	const { userId } = req.query;
 
-		res.json(
-			makeResponseBody(
-				'success',
-				resources,
-				'Orders retreived successfully!',
-				resources.length
-			)
+	try {
+		const resources = await Order.find({ user: ObjectId(userId) }).populate(
+			'items.product'
 		);
+
+		res.json({
+			payload: resources,
+			count: resources.length,
+			error: null
+		});
 	} catch (err) {
-		res.json(makeResponseBody('error', null, err.message | err, 0));
+		res.status(400).json({
+			payload: null,
+			error: err.message || err,
+			count: 0
+		});
 	}
 }
 
@@ -26,65 +33,67 @@ async function getOne(req, res) {
 	const objectId = req.params.objectId;
 
 	try {
-		let resource = await Order.findOne(ObjectId(objectId))
+		let order = await Order.findOne(ObjectId(objectId))
 			.populate('items.product')
 			.populate('user');
-		resource.user = {
-			email: resource.user.email,
-			userInfo: resource.user.userInfo
-		};
-		if (!resource) {
-			throw Error('Order not found!');
+
+		if (!order) {
+			throw OrderMessages.ORDER_NOT_FOUND;
 		}
-		res.json(
-			makeResponseBody('success', resource, 'Order retreived successfully!', 1)
-		);
+
+		res.json({
+			payload: order,
+			count: 1
+		});
 	} catch (err) {
-		res.json(makeResponseBody('error', null, err.message || err, 0));
+		res.status(400).json({
+			payload: null,
+			error: err
+		});
 	}
 }
 
 async function addOne(req, res) {
-	const { items, shippingAddress, createdAt, message } = req.body;
+	const { items, shippingAddress, message } = req.body;
 
-	const date = new Date(createdAt);
-	const offset = date.getTimezoneOffset();
+	const now = new Date();
+	const offset = now.getTimezoneOffset();
+	const totalPrice = computeTotalPrice(items);
 
 	const order = new Order({
 		items,
-		createdAt,
-		offset,
-		message,
+		totalPrice,
 		shippingAddress,
+		message,
 		user: req.user._id,
-		modifiedAt: createdAt,
-		status: 'Aun no procesada'
+		createdAt: now,
+		modifiedAt: now,
+		offset
 	});
+
 	try {
 		await order.save();
 
 		let createdOrder = {
-			_id: order._id,
-			totalPrice: order.computeTotalPrice(),
+			objectId: order._id,
 			items,
-			createdAt,
-			shippingAddress,
-			customerName: req.user.getFullName(),
-			message
+			totalPrice: order.totalPrice,
+			shippingAddress: order.shippingAddress,
+			message,
+			createdAt: order.createdAt,
+			customerName: req.user.getFullName()
 		};
 
-		res.json(
-			makeResponseBody(
-				'success',
-				createdOrder,
-				'Order created successfully!',
-				1
-			)
-		);
+		res.status(201).json({
+			payload: createdOrder,
+			error: null,
+			count: 1
+		});
 	} catch (err) {
-		res
-			.status(422)
-			.json(makeResponseBody('error', null, err.message || err, 0));
+		res.status(400).json({
+			payload: null,
+			error: err.message || err
+		});
 	}
 }
 

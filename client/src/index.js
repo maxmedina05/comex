@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'react-datetime/css/react-datetime.css';
 import 'react-select/dist/react-select.css';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 import React from 'react';
@@ -14,7 +15,9 @@ import App from './App';
 import reducers from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+import { logger } from './middlewares/error-handler.middleware';
+
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk, logger));
 
 ReactDOM.render(
 	<Provider store={store}>

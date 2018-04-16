@@ -49,7 +49,6 @@ class OrderConfirmationPage extends Component {
 						<input
 							className="form-control-plaintext"
 							name="orderDate"
-							type="orderDate"
 							readOnly
 							value={order.createdAt}
 						/>
@@ -137,6 +136,9 @@ class OrderConfirmationPage extends Component {
 }
 
 function mapStateToProps(state) {
+	if (state.checkout.order === null) {
+		return { order: state.orders.order };
+	}
 	return { order: state.checkout.order };
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ResourceTable from '../../reusable-components/resource-table';
+import ResourceTable from '../../reusable-components/resource-table.old';
 import axios from 'axios';
 
 export default class OrderListPage extends Component {

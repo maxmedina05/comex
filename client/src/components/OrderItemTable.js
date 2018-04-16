@@ -9,7 +9,7 @@ function computeTotalPrice(items) {
 }
 
 function computePrice(item) {
-	return Math.abs(item.unitPrice - item.discount) * item.qty;
+	return Math.abs(item.unitPrice - item.discount) * item.quantity;
 }
 
 function trimLongText(text) {
@@ -23,11 +23,11 @@ const OrderItemRow = ({
 	handleIncrementOrderItemCount,
 	handleDecrementOrderItemCount
 }) => {
-	const { product, qty } = item;
+	const { product, quantity } = item;
 
 	return (
 		<tr>
-			<td>{qty}x</td>
+			<td>{quantity}x</td>
 			<td>{product.name} </td>
 			<td>DOP {computePrice(item)}</td>
 			{!hideActions && (
@@ -71,7 +71,7 @@ export const OrderItemTable = ({
 			<tbody>
 				{items.map(item => (
 					<OrderItemRow
-						key={item.id}
+						key={item.product._id}
 						item={item}
 						hideActions={hideActions}
 						handleRemoveOrderItemFromCart={handleRemoveOrderItemFromCart}

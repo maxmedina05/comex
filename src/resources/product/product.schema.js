@@ -8,4 +8,4 @@ const ProductSchema = new Schema({
 	imageUrl: String
 });
 
-mongoose.model('products', ProductSchema);
+mongoose.model('Product', ProductSchema);

@@ -4,7 +4,7 @@ import {
 	INCREMENT_ORDER_ITEM_COUNT,
 	DECREMENT_ORDER_ITEM_COUNT,
 	CLEAR_CART
-} from '../actions/types';
+} from '../constants/types';
 
 function handleAddOrderItemToCart(state, action) {
 	const existingItem = state.find(x => x.product._id === action.product._id);
@@ -12,7 +12,7 @@ function handleAddOrderItemToCart(state, action) {
 		return handleIncrementOrderItemCount(state, {
 			type: INCREMENT_ORDER_ITEM_COUNT,
 			id: existingItem.id,
-			qty: existingItem.qty + 1
+			quantity: existingItem.quantity + 1
 		});
 	}
 	return [
@@ -20,7 +20,7 @@ function handleAddOrderItemToCart(state, action) {
 		{
 			id: action.id,
 			product: action.product,
-			qty: action.qty,
+			quantity: action.quantity,
 			unitPrice: action.unitPrice,
 			discount: action.discount
 		}
@@ -33,22 +33,22 @@ function handleRemoveOrderItemFromCart(state, action) {
 
 function handleIncrementOrderItemCount(state, action) {
 	const existingItem = state.find(x => x.id === action.id);
-	if (existingItem.qty > 9) return state;
+	if (existingItem.quantity > 9) return state;
 	return [
 		...state.filter(x => x.id !== action.id),
-		{ ...existingItem, qty: existingItem.qty + 1 }
+		{ ...existingItem, quantity: existingItem.quantity + 1 }
 	];
 }
 
 function handleDecrementOrderItemCount(state, action) {
 	const existingItem = state.find(x => x.id === action.id);
-	if (existingItem.qty - 1 <= 0) {
+	if (existingItem.quantity - 1 <= 0) {
 		return handleRemoveOrderItemFromCart(state, action);
 	}
 
 	return [
 		...state.filter(x => x.id !== action.id),
-		{ ...existingItem, qty: existingItem.qty - 1 }
+		{ ...existingItem, quantity: existingItem.quantity - 1 }
 	];
 }
 

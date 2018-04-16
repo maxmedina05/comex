@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const MenuItem = new Schema({
-	product: { type: Schema.Types.ObjectId, ref: 'products' },
+	product: { type: Schema.Types.ObjectId, ref: 'Product' },
 	discount: { type: Number, default: 0 }
 });
 

@@ -6,7 +6,7 @@ import {
 	SUBMIT_REGISTER_REQUEST,
 	SUBMIT_REGISTER_FAILURE,
 	SUBMIT_REGISTER_SUCCESS
-} from '../actions/types';
+} from '../constants/types';
 
 export default function(
 	state = {

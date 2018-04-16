@@ -2,7 +2,7 @@ import {
 	SUBMIT_ORDER_REQUEST,
 	SUBMIT_ORDER_SUCCESS,
 	SUBMIT_ORDER_FAILURE
-} from '../actions/types';
+} from '../constants/types';
 
 export default function(
 	state = {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import {
 	ADD_ORDER_ITEM_TO_CART,
 	REMOVE_ORDER_ITEM_FROM_CART,
@@ -8,8 +9,8 @@ import {
 	SUBMIT_ORDER_SUCCESS,
 	SUBMIT_ORDER_FAILURE,
 	CLEAR_CART
-} from './types';
-import { BASE_API_URL } from '../constants';
+} from '../constants/types';
+import { BASE_API_URL } from '../constants/constants';
 
 let nextOrderItemId = 1;
 
@@ -19,7 +20,7 @@ export const addOrderItemToCart = menuItem => ({
 	product: menuItem.product,
 	unitPrice: menuItem.product.price,
 	discount: menuItem.discount,
-	qty: 1
+	quantity: 1
 });
 
 export const removeOrderItemFromCart = orderItem => ({
@@ -30,13 +31,13 @@ export const removeOrderItemFromCart = orderItem => ({
 export const incrementOrderItemCount = orderItem => ({
 	type: INCREMENT_ORDER_ITEM_COUNT,
 	id: orderItem.id,
-	qty: orderItem.qty + 1
+	quantity: orderItem.quantity + 1
 });
 
 export const decrementOrderItemCount = orderItem => ({
 	type: DECREMENT_ORDER_ITEM_COUNT,
 	id: orderItem.id,
-	qty: orderItem.qty - 1
+	quantity: orderItem.quantity - 1
 });
 
 const submitOrderRequest = preOrder => ({
@@ -59,19 +60,19 @@ const submitOrderFailure = message => ({
 
 export const submitOrder = (preOrder, history) => async dispatch => {
 	dispatch(submitOrderRequest(preOrder));
-
-	const response = await axios.post(`${BASE_API_URL}/orders`, {
-		items: preOrder.items,
-		message: preOrder.message,
-		shippingAddress: preOrder.address,
-		createdAt: new Date()
-	});
-	const body = response.data;
-	if (body.status === 'success') {
+	try {
+		const response = await axios.post(`${BASE_API_URL}/orders`, {
+			items: preOrder.items,
+			message: preOrder.message,
+			shippingAddress: preOrder.address
+		});
 		dispatch(clearCart());
-		dispatch(submitOrderSuccess(body.data));
-		history.push(`/orders/${body.data._id}/confirmation`);
-	} else {
-		dispatch(submitOrderFailure(body.message));
+		dispatch(submitOrderSuccess(response.data.payload));
+		history.push(`/orders/${response.data.payload.objectId}/confirmation`);
+		toast.warning('Su pedido ya fue creado!');
+	} catch (err) {
+		const response = err.response.data;
+		dispatch(submitOrderFailure(response.error));
+		toast.error('Hubo un error haciendo su pedido!');
 	}
 };

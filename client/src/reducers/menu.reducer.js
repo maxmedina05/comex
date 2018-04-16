@@ -2,7 +2,7 @@ import {
 	FETCH_TODAY_MENU_REQUEST,
 	FETCH_TODAY_MENU_FAILURE,
 	FETCH_TODAY_MENU_SUCCESS
-} from '../actions/types';
+} from '../constants/types';
 
 export default function(
 	state = {

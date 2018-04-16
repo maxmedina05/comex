@@ -1,37 +1,84 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ResourceTable = ({
-	header,
-	displayFields,
-	dataSource,
-	listItemClick,
-	deleteActionClick
+let rowCount = 1;
+
+function renderLabel(field) {
+	if (typeof field === 'object') {
+		return field.label;
+	}
+
+	return field;
+}
+
+function renderValue(field, resource) {
+	if (field === '#') return rowCount++;
+
+	if (typeof field === 'object') {
+		if (typeof field.value === 'function') {
+			return field.value(resource);
+		}
+
+		return resource[field.value];
+	}
+
+	return resource[field];
+}
+
+const ResourceRow = ({
+	fields,
+	resource,
+	handleShowClick,
+	handleDeleteClick
 }) => {
 	return (
-		<table className="table table-striped table-hover table-bordered">
+		<tr>
+			{fields.map((field, index) => (
+				<td key={index}>{renderValue(field, resource)}</td>
+			))}
+			<td>
+				{handleShowClick && (
+					<button
+						className="btn btn-warning"
+						onClick={() => handleShowClick(resource)}
+					>
+						Ver
+					</button>
+				)}
+				{handleDeleteClick && (
+					<button className="btn btn-danger">Eliminar</button>
+				)}
+			</td>
+		</tr>
+	);
+};
+
+const ResourceTable = ({
+	className,
+	fields,
+	dataSource,
+	handleShowClick,
+	handleDeleteClick
+}) => {
+	const showActions = handleShowClick || handleDeleteClick;
+	return (
+		<table className={className}>
 			<thead>
 				<tr>
-					{header.map(name => (
-						<th key={name} scope="col">
-							{name}
-						</th>
+					{fields.map((field, index) => (
+						<th key={index}>{renderLabel(field)}</th>
 					))}
-					{deleteActionClick && (
-						<th className="no-print" scope="col">
-							Acciones
-						</th>
-					)}
+					{showActions && <th>Acciones</th>}
 				</tr>
 			</thead>
 			<tbody>
-				{dataSource.map(resource => (
-					<ResourceTableRow
-						key={resource._id}
-						resource={resource}
-						displayFields={displayFields}
-						listItemClick={listItemClick}
-						deleteActionClick={deleteActionClick}
+				{dataSource.map((item, index) => (
+					<ResourceRow
+						key={index}
+						resource={item}
+						fields={fields}
+						handleShowClick={handleShowClick}
+						handleDeleteClick={handleDeleteClick}
 					/>
 				))}
 			</tbody>
@@ -40,39 +87,11 @@ const ResourceTable = ({
 };
 
 ResourceTable.propTypes = {
-	dataSource: PropTypes.array
+	dataSource: PropTypes.array.isRequired
 };
 
 ResourceTable.defaultProps = {
 	dataSource: []
-};
-
-const ResourceTableRow = ({
-	resource,
-	displayFields,
-	listItemClick,
-	deleteActionClick
-}) => {
-	return (
-		<tr>
-			<th scope="row">
-				<a className="btn btn-info" onClick={() => listItemClick(resource._id)}>
-					{resource._id.substr(-4)}
-				</a>
-			</th>
-			{displayFields.map(field => <td key={field}>{resource[field]}</td>)}
-			{deleteActionClick && (
-				<td className="no-print">
-					<button
-						className="btn btn-warning"
-						onClick={() => deleteActionClick(resource._id)}
-					>
-						Eliminar
-					</button>
-				</td>
-			)}
-		</tr>
-	);
 };
 
 export default ResourceTable;

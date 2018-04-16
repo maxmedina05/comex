@@ -28,7 +28,7 @@ const MenuGridItem = ({ item, onAddOrderItemToCart }) => {
 						</span>
 						<button
 							onClick={() => onAddOrderItemToCart(item)}
-							className="btn btn-danger"
+							className="btn btn-primary"
 						>
 							Agregar
 						</button>

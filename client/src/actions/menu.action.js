@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { BASE_API_URL } from '../constants';
+import { BASE_API_URL } from '../constants/constants';
 import {
 	FETCH_TODAY_MENU_REQUEST,
 	FETCH_TODAY_MENU_FAILURE,
 	FETCH_TODAY_MENU_SUCCESS
-} from './types';
+} from '../constants/types';
 
 function fetchTodaysMenuRequest(date) {
 	return {

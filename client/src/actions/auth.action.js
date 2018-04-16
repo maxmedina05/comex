@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_API_URL } from '../constants';
+import { BASE_API_URL } from '../constants/constants';
 import {
 	FETCH_USER_REQUEST,
 	FETCH_USER_SUCCESS,
@@ -10,7 +10,7 @@ import {
 	SUBMIT_REGISTER_REQUEST,
 	SUBMIT_REGISTER_FAILURE,
 	SUBMIT_REGISTER_SUCCESS
-} from './types';
+} from '../constants/types';
 
 const fetchUserRequest = () => ({
 	type: FETCH_USER_REQUEST
