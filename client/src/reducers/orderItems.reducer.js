@@ -6,6 +6,8 @@ import {
 	CLEAR_CART
 } from '../constants/types';
 
+const MAX_QUANTITY_IN_CART = 10;
+
 function handleAddOrderItemToCart(state, action) {
 	const existingItem = state.find(x => x.product._id === action.product._id);
 	if (existingItem) {
@@ -33,11 +35,14 @@ function handleRemoveOrderItemFromCart(state, action) {
 
 function handleIncrementOrderItemCount(state, action) {
 	const existingItem = state.find(x => x.id === action.id);
-	if (existingItem.quantity > 9) return state;
-	return [
-		...state.filter(x => x.id !== action.id),
-		{ ...existingItem, quantity: existingItem.quantity + 1 }
-	];
+	if (existingItem.quantity > MAX_QUANTITY_IN_CART) return state;
+
+	return state.map(x => {
+		if (x.id === action.id) {
+			return { ...existingItem, quantity: existingItem.quantity + 1 };
+		}
+		return x;
+	});
 }
 
 function handleDecrementOrderItemCount(state, action) {
@@ -47,8 +52,12 @@ function handleDecrementOrderItemCount(state, action) {
 	}
 
 	return [
-		...state.filter(x => x.id !== action.id),
-		{ ...existingItem, quantity: existingItem.quantity - 1 }
+		...state.map(x => {
+			if (x.id === action.id) {
+				return { ...existingItem, quantity: existingItem.quantity - 1 };
+			}
+			return x;
+		})
 	];
 }
 
