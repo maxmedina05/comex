@@ -8,16 +8,17 @@ const Product = mongoose.model('Product');
 async function getAll(req, res) {
 	try {
 		const products = await Product.find();
-		res.json(
-			makeResponseBody(
-				'success',
-				products,
-				'Products retreived successfully!',
-				products.length
-			)
-		);
+		res.json({
+			payload: products,
+			count: products.length,
+			error: null
+		});
 	} catch (err) {
-		res.json(makeResponseBody('error', null, err.message | err, 0));
+		res.status(400).json({
+			payload: null,
+			error: err.message || err,
+			count: 0
+		});
 	}
 }
 

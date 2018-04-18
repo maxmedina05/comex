@@ -18,7 +18,7 @@ export default function(
 	switch (action.type) {
 		case FETCH_ONE_ORDER_REQUEST:
 		case FETCH_ORDERS_REQUEST:
-			return Object.assign({}, state, { isLoading: true, error: null });
+			return Object.assign({}, state, { isLoading: true, error: false });
 		case FETCH_ORDERS_SUCCESS:
 			return Object.assign({}, state, {
 				isLoading: false,
