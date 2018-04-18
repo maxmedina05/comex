@@ -6,8 +6,8 @@ import {
 
 export default function(
 	state = {
-		isSubmitting: false,
-		hasErrors: false,
+		isLoading: false,
+		error: false,
 		order: null
 	},
 	action
@@ -16,21 +16,21 @@ export default function(
 		case SUBMIT_ORDER_REQUEST:
 			return Object.assign({}, state, {
 				order: null,
-				isSubmitting: true,
-				hasErrors: false
+				isLoading: true,
+				error: false
 			});
 		case SUBMIT_ORDER_SUCCESS:
 			return Object.assign({}, state, {
-				isSubmitting: false,
-				hasErrors: false,
+				isLoading: false,
+				error: false,
 				order: action.order,
 				createdAt: action.createdAt
 			});
 		case SUBMIT_ORDER_FAILURE:
 			return Object.assign({}, state, {
 				order: null,
-				isSubmitting: false,
-				hasErrors: true
+				isLoading: false,
+				error: action.error
 			});
 		default:
 			return state;

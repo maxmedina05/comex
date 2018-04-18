@@ -102,8 +102,11 @@ export default class UserProfilePage extends Component {
 	render() {
 		return (
 			<div className="container">
-				<h1>Mi Perfil</h1>
-				<form onSubmit={this.handleSubmit}>
+				<form
+					className="paper-card paper-form d-flex flex-column"
+					onSubmit={this.handleSubmit}
+				>
+					<h1>Mi Perfil</h1>
 					<div className="form-group">
 						<label htmlFor="email">Email</label>
 						<input
@@ -212,7 +215,7 @@ export default class UserProfilePage extends Component {
 						/>
 					</div>
 
-					<button className="btn btn-primary">Guardar</button>
+					<button className="btn btn-primary align-self-end">Guardar</button>
 				</form>
 			</div>
 		);

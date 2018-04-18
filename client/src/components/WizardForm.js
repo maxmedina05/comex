@@ -119,7 +119,7 @@ class WizardForm extends Component {
 					</button>
 					<button
 						type="button"
-						className="btn btn-info"
+						className="btn btn-primary"
 						onClick={this._handleNext}
 					>
 						{this.state.currentStep === this.props.stepCount

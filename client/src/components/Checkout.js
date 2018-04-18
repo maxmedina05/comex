@@ -40,7 +40,10 @@ class Checkout extends Component {
 	}
 
 	handleSubmitOrder() {
-		console.log('handleSubmitOrder');
+		if (this.props.isLoading) {
+			return;
+		}
+
 		if (this.props.orderItems && this.props.orderItems.length >= 0) {
 			const { street, city, state, reference, message } = this.state;
 			const address = {
@@ -63,7 +66,7 @@ class Checkout extends Component {
 	render() {
 		return (
 			<WizardForm
-				className="WizardForm"
+				className="paper-card"
 				stepCount={3}
 				lastAction="Pedir"
 				handleSubmit={this.handleSubmitOrder}
@@ -244,7 +247,7 @@ class Checkout extends Component {
 }
 
 function mapStateToProps(state) {
-	const { isSubmitting, hasErrors, order } = state.checkout;
+	const { isLoading, error, order } = state.checkout;
 	const { fullName, userInfo } = state.authentication.payload;
 	let user = {
 		email: '',
@@ -260,8 +263,8 @@ function mapStateToProps(state) {
 		user,
 		order,
 		orderItems: state.orderItems,
-		isSubmitting,
-		hasErrors
+		isLoading,
+		error
 	};
 }
 

@@ -14,14 +14,18 @@ import { BASE_API_URL } from '../constants/constants';
 
 let nextOrderItemId = 1;
 
-export const addOrderItemToCart = menuItem => ({
-	type: ADD_ORDER_ITEM_TO_CART,
-	id: nextOrderItemId++,
-	product: menuItem.product,
-	unitPrice: menuItem.product.price,
-	discount: menuItem.discount,
-	quantity: 1
-});
+export const addOrderItemToCart = menuItem => {
+	toast.info(`Se agrego "${menuItem.product.name}" al carrito.`);
+
+	return {
+		type: ADD_ORDER_ITEM_TO_CART,
+		id: nextOrderItemId++,
+		product: menuItem.product,
+		unitPrice: menuItem.product.price,
+		discount: menuItem.discount,
+		quantity: 1
+	};
+};
 
 export const removeOrderItemFromCart = orderItem => ({
 	type: REMOVE_ORDER_ITEM_FROM_CART,
@@ -53,9 +57,9 @@ const submitOrderSuccess = order => ({
 	type: SUBMIT_ORDER_SUCCESS,
 	order
 });
-const submitOrderFailure = message => ({
+const submitOrderFailure = error => ({
 	type: SUBMIT_ORDER_FAILURE,
-	message
+	error
 });
 
 export const submitOrder = (preOrder, history) => async dispatch => {
@@ -69,7 +73,7 @@ export const submitOrder = (preOrder, history) => async dispatch => {
 		dispatch(clearCart());
 		dispatch(submitOrderSuccess(response.data.payload));
 		history.push(`/orders/${response.data.payload.objectId}/confirmation`);
-		toast.warning('Su pedido ya fue creado!');
+		toast.success('Su pedido ya fue creado!');
 	} catch (err) {
 		const response = err.response.data;
 		dispatch(submitOrderFailure(response.error));
